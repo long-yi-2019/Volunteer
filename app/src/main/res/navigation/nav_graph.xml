@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.myapplication.LoginFragment">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"/>
+        <action
+            android:id="@+id/action_loginFragment_to_activitySearchFragment"
+            app:destination="@id/activitySearchFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.myapplication.RegisterFragment">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/activitySearchFragment"
+        android:name="com.example.myapplication.ActivitySearchFragment">
+        <action
+            android:id="@+id/action_activitySearchFragment_to_activityDetailsFragment"
+            app:destination="@id/activityDetailsFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/activityDetailsFragment"
+        android:name="com.example.myapplication.ActivityDetailsFragment"/>
+
+    <fragment
+        android:id="@+id/personalCenterFragment"
+        android:name="com.example.myapplication.PersonalCenterFragment">
+        <action
+            android:id="@+id/action_personalCenterFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment"/>
+        <action
+            android:id="@+id/action_personalCenterFragment_to_passwordChangeFragment"
+            app:destination="@id/passwordChangeFragment"/>
+        <action
+            android:id="@+id/action_personalCenterFragment_to_activityPublishFragment"
+            app:destination="@id/activityPublishFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/personalInfoFragment"
+        android:name="com.example.myapplication.PersonalInfoFragment"/>
+
+    <fragment
+        android:id="@+id/passwordChangeFragment"
+        android:name="com.example.myapplication.PasswordChangeFragment"/>
+
+    <fragment
+        android:id="@+id/activityPublishFragment"
+        android:name="com.example.myapplication.ActivityPublishFragment"/>
+
+</navigation>

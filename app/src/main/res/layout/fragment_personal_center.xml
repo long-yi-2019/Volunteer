@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- 角色标题 -->
+    <TextView
+        android:id="@+id/role_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="角色：普通用户"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 活动列表 - RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activities_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/card_background"
+        android:padding="8dp"
+        android:visibility="gone"/>
+
+    <!-- RecyclerView 占位符（当不可见时显示） -->
+    <TextView
+        android:id="@+id/placeholder_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无活动信息"
+        android:textColor="#888"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="visible"/>
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEE"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 个人信息设置 -->
+    <Button
+        android:id="@+id/personal_info_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="个人信息设置"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#3F51B5"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 修改密码 -->
+    <Button
+        android:id="@+id/password_change_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="修改密码"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#3F51B5"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 发布活动按钮（默认隐藏） -->
+    <Button
+        android:id="@+id/publish_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="发布活动"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#4CAF50"
+        android:visibility="gone"/>
+
+</LinearLayout>

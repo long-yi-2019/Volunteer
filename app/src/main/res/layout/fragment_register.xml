@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:fitsSystemWindows="true">
+
+    <!-- 标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 用户名输入框 -->
+    <EditText
+        android:id="@+id/username_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="用户名 (6-20字符，字母/数字)"
+        android:inputType="text"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 密码输入框 -->
+    <EditText
+        android:id="@+id/password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="密码 (8-16字符，字母/数字)"
+        android:inputType="textPassword"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 确认密码输入框 -->
+    <EditText
+        android:id="@+id/confirm_password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 身份选择下拉框 -->
+    <Spinner
+        android:id="@+id/identity_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/spinner_background"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:layout_marginBottom="16dp"
+        android:spinnerMode="dropdown"/>
+
+    <!-- 错误提示信息 -->
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorError"
+        android:layout_marginBottom="16dp"
+        android:textAlignment="center"/>
+
+    <!-- 注册按钮 -->
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="注册"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#3F51B5"
+        android:textStyle="bold"/>
+
+</LinearLayout>

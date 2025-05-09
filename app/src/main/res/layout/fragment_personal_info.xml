@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- 标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="个人信息设置"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 用户名 -->
+    <EditText
+        android:id="@+id/username_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="用户名"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 姓名 -->
+    <EditText
+        android:id="@+id/name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="姓名"
+        android:inputType="textPersonName"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 保存按钮 -->
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="保存"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:backgroundTint="#3F51B5"
+        android:elevation="4dp"/>
+
+</LinearLayout>

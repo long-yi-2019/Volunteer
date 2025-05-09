@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- 活动名称 -->
+    <TextView
+        android:id="@+id/activity_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="活动名称：春季读书分享会"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 地点 -->
+    <TextView
+        android:id="@+id/activity_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📍 地点：图书馆三楼报告厅"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 时间 -->
+    <TextView
+        android:id="@+id/activity_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📅 时间：2025年4月10日 14:00 - 16:00"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 时长 -->
+    <TextView
+        android:id="@+id/activity_duration_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏱️ 时长：2小时"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 预约按钮 -->
+    <Button
+        android:id="@+id/book_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="立即预约"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#3F51B5"
+        android:stateListAnimator="@null"/>
+
+</LinearLayout>
