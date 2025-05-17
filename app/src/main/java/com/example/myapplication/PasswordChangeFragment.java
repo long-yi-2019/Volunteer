@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class PasswordChangeFragment extends Fragment {
-
+    String Username;
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -28,6 +32,14 @@ public class PasswordChangeFragment extends Fragment {
         Button saveButton = view.findViewById(R.id.save_button);
         TextView errorText = view.findViewById(R.id.error_text);
 
+        // 初始化ViewModel
+        VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
+        // 原来的名字
+        viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
+            Username = name;
+            Log.d("DEBUG", "获取到用户名: " + Username);
+            // 在这里更新UI或执行后续操作
+        });
         // 保存按钮
         saveButton.setOnClickListener(v -> {
             String oldPassword = oldPasswordEditText.getText().toString();
@@ -49,6 +61,17 @@ public class PasswordChangeFragment extends Fragment {
 
             Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show();
             // TODO: 实现密码修改逻辑
+            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+            boolean success = dbHelper.changePassword(Username, oldPassword, newPassword);
+            if (success) {
+                viewModel.setPassWord(newPassword);
+                Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show();      NavController navController = Navigation.findNavController(view);
+                navController.popBackStack(); // 返回上一页
+            } else {
+                errorText.setText("旧密码不正确");
+                return;
+            }
+
         });
 
         return view;

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class LoginFragment extends Fragment {
     private VolunteerViewModel viewModel;
     private boolean passwordVisible = false;
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class LoginFragment extends Fragment {
         Spinner identitySpinner = view.findViewById(R.id.identity_spinner);
         Button loginButton = view.findViewById(R.id.login_button);
         TextView registerLink = view.findViewById(R.id.register_link);
-
+        TextView errorText = view.findViewById(R.id.error_text);
         // 设置身份选择下拉菜单
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, new String[]{"Volunteer", "Organizer", "Admin"});
@@ -60,12 +62,35 @@ public class LoginFragment extends Fragment {
 
         // 登录按钮
         loginButton.setOnClickListener(v -> {
+            String username = usernameEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
             String selectedIdentity = identitySpinner.getSelectedItem().toString();
             viewModel.setSelectedIdentity(selectedIdentity);
             viewModel.setUserRole(selectedIdentity);
+            viewModel.setUsername(username);
+            viewModel.setPassWord(password);
+                    String role=selectedIdentity;
+                    // 简单验证
+                    if (username.isEmpty() || password.isEmpty()) {
+                        errorText.setText("用户名和密码不能为空");
+                        return;
+                    }
+
+                    // 验证登录
+                    DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                    boolean loginSuccess = dbHelper.login(username, password,role);
+//                    dbHelper.closeDatabase();
+                    if (loginSuccess) {
+                        // 登录成功，跳转到主界面
+                        NavController navController = Navigation.findNavController(view);
+                        navController.navigate(R.id.action_loginFragment_to_activitySearchFragment);;
+                    } else {
+                        errorText.setText("用户名或密码或角色错误");
+                        return;
+                    }
+
             // 模拟登录，导航到活动搜索
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.action_loginFragment_to_activitySearchFragment);
+
         });
 
         // 注册链接

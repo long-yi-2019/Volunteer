@@ -1,23 +1,27 @@
 package com.example.myapplication;
 
+import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.Entity.Activity;
+
 import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> {
 
-    private List<ActivityItem> activities;
+    private List<Activity> activities;
     private OnActivityClickListener listener;
 
     public interface OnActivityClickListener {
-        void onActivityClick(ActivityItem activity);
+        void onActivityClick(Activity activity);
     }
 
-    public ActivityAdapter(List<ActivityItem> activities, OnActivityClickListener listener) {
+    public ActivityAdapter(List<Activity> activities, OnActivityClickListener listener) {
         this.activities = activities;
         this.listener = listener;
     }
@@ -31,11 +35,11 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ActivityItem activity = activities.get(position);
+        Activity activity = activities.get(position);
         holder.nameTextView.setText(activity.getName());
-        holder.locationTextView.setText(activity.getLocation());
-        holder.timeTextView.setText(activity.getTime());
-        holder.durationTextView.setText(activity.getDuration());
+        holder.locationTextView.setText(activity.getArea());
+        holder.timeTextView.setText(activity.getBeginTime());
+        holder.durationTextView.setText(String.valueOf(activity.getVolunteerTime()));
         holder.itemView.setOnClickListener(v -> listener.onActivityClick(activity));
     }
 

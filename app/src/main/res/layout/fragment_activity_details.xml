@@ -6,6 +6,7 @@
     android:padding="24dp">
 
     <!-- 活动名称 -->
+
     <TextView
         android:id="@+id/activity_name_text"
         android:layout_width="wrap_content"
@@ -43,14 +44,23 @@
         android:layout_marginBottom="24dp"/>
 
     <!-- 预约按钮 -->
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorError" />
+
     <Button
         android:id="@+id/book_button"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:text="立即预约"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
         android:backgroundTint="#3F51B5"
-        android:stateListAnimator="@null"/>
+        android:stateListAnimator="@null"
+        android:text="立即预约"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
 </LinearLayout>
