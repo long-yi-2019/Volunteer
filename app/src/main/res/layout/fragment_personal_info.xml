@@ -38,14 +38,22 @@
         android:layout_marginBottom="24dp"/>
 
     <!-- 保存按钮 -->
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/colorError" />
+
     <Button
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:backgroundTint="#3F51B5"
+        android:elevation="4dp"
         android:text="保存"
         android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:backgroundTint="#3F51B5"
-        android:elevation="4dp"/>
+        android:textSize="16sp" />
 
 </LinearLayout>

@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.myapplication.Entity.Account;
+
 public class RegisterFragment extends Fragment {
 
     private VolunteerViewModel viewModel;
@@ -62,6 +64,33 @@ public class RegisterFragment extends Fragment {
             }
             if (!password.equals(confirmPassword)) {
                 errorText.setText("两次输入的密码不一致");
+                return;
+            }
+
+
+            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+            if (dbHelper.isUsernameExists(username)) {
+                errorText.setText("用户名已存在");
+                dbHelper.closeDatabase();
+                return;
+            }
+            dbHelper.closeDatabase();
+            Account new_volunteer=new Account();
+            new_volunteer.setUsername(username);
+            new_volunteer.setPassword(password);
+            new_volunteer.setRole(selectedIdentity);
+            long result=dbHelper.register(new_volunteer);
+            if (result != -1) {
+                // 注册成功，更新UI和导航
+            }
+            else if(result == -2)
+            {
+                errorText.setText("账号已被注册");
+                return;
+            }
+            else
+            {
+                errorText.setText("注册失败");
                 return;
             }
 
