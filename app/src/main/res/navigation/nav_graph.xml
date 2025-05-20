@@ -42,16 +42,23 @@
             android:id="@+id/action_personalCenterFragment_to_personalInfoFragment"
             app:destination="@id/personalInfoFragment"/>
         <action
-            android:id="@+id/action_personalCenterFragment_to_passwordChangeFragment"
-            app:destination="@id/passwordChangeFragment"/>
+            android:id="@+id/action_personalCenterFragment_to_activitySearchFragment"
+            app:destination="@id/activitySearchFragment"/>
         <action
             android:id="@+id/action_personalCenterFragment_to_activityPublishFragment"
             app:destination="@id/activityPublishFragment"/>
+        <action
+            android:id="@+id/action_personalCenterFragment_to_activityDetailsFragment"
+            app:destination="@id/activityDetailsFragment"/>
     </fragment>
 
     <fragment
         android:id="@+id/personalInfoFragment"
-        android:name="com.example.myapplication.PersonalInfoFragment"/>
+        android:name="com.example.myapplication.PersonalInfoFragment">
+        <action
+            android:id="@+id/action_personalInfoFragment_to_passwordChangeFragment"
+            app:destination="@id/passwordChangeFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/passwordChangeFragment"

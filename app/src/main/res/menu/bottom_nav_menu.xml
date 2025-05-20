@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/activitySearchFragment"
+        android:icon="@drawable/home"
         android:title="首页"/>
     <item
         android:id="@+id/personalCenterFragment"
-        android:title="个人中心"/>
+        android:title="个人中心"
+        android:icon="@drawable/person_center"/>
 </menu>

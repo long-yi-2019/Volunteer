@@ -39,7 +39,7 @@ public class PersonalCenterFragment extends Fragment {
         TextView roleTextView = view.findViewById(R.id.role_text);
         RecyclerView recyclerView = view.findViewById(R.id.activities_recycler_view);
         Button personalInfoButton = view.findViewById(R.id.personal_info_button);
-        Button passwordChangeButton = view.findViewById(R.id.password_change_button);
+//        Button passwordChangeButton = view.findViewById(R.id.password_change_button);
         Button publishButton = view.findViewById(R.id.publish_button);
 
         // 初始化ViewModel
@@ -60,6 +60,7 @@ public class PersonalCenterFragment extends Fragment {
             // 在这里执行依赖用户名的操作
             if (Username != null) {
                 List<Activity> activities = dbHelper.getActivitiesByUsername(Username);
+//                List<Activity> activities = getSampleActivities();
                 adapter = new ActivityAdapter(activities, activity -> {
                     // 导航到活动详情
                     Bundle bundle = new Bundle();
@@ -93,7 +94,7 @@ public class PersonalCenterFragment extends Fragment {
 
         // 导航按钮
         personalInfoButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_personalInfoFragment));
-        passwordChangeButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_passwordChangeFragment));
+//        passwordChangeButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_passwordChangeFragment));
         publishButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityPublishFragment));
 
         return view;
@@ -104,41 +105,41 @@ public class PersonalCenterFragment extends Fragment {
 //        // 1. 校园环境维护类
 //        activities.add(new Activity(0, "学堂新居·家蒸护航", "", "校园社区",
 //                "为教职工宿舍区提供搬家协助和环境整理服务",
-//                10, 0, "2025-05-10 08:00", "2025-05-10 10:00", 2, "ongoing", 1));
+//                10, 0, "2025-05-10 08:00", "2025-05-10 10:00", 2, "ongoing", "1"));
 //
 //        // 2. 开学迎新活动
 //        activities.add(new Activity(1, "新生导航·温暖启程", "", "校门口广场",
 //                "帮助新生搬运行李、引导报到流程、校园导览",
-//                50, 32, "2025-09-01 07:00", "2025-09-01 17:00", 6, "pending", 2));
+//                50, 32, "2025-09-01 07:00", "2025-09-01 17:00", 6, "pending", "2"));
 //
 //        // 3. 图书馆志愿服务
 //        activities.add(new Activity(2, "书香守护者", "", "校图书馆",
 //                "图书整理、读者引导、阅读区秩序维护",
-//                15, 8, "2025-05-15 13:30", "2025-05-15 16:30", 3, "ongoing", 3));
+//                15, 8, "2025-05-15 13:30", "2025-05-15 16:30", 3, "ongoing", "3"));
 //
 //        // 4. 环保回收行动
 //        activities.add(new Activity(3, "绿色校园·废品回收", "", "全校各宿舍楼",
 //                "可回收物分类收集、环保知识宣传",
-//                20, 12, "2025-05-20 09:00", "2025-05-20 11:30", 2, "upcoming", 1));
+//                20, 12, "2025-05-20 09:00", "2025-05-20 11:30", 2, "upcoming", "1"));
 //
 //        // 5. 支教帮扶活动
 //        activities.add(new Activity(4, "周末课堂·爱心支教", "", "农民工子弟学校",
 //                "为周边社区儿童提供学科辅导和兴趣课程",
-//                30, 25, "2025-05-16 08:30", "2025-05-16 11:30", 3, "ongoing", 4));
+//                30, 25, "2025-05-16 08:30", "2025-05-16 11:30", 3, "ongoing", "4"));
 //
 //        // 6. 运动会志愿服务
 //        activities.add(new Activity(6, "校运会后勤保障", "", "学校操场",
 //                "担任裁判助理、场地维护、医疗点支持",
-//                40, 40, "2025-10-12 08:00", "2025-10-12 17:00", 8, "pending", 5));
+//                40, 40, "2025-10-12 08:00", "2025-10-12 17:00", 8, "pending", "5"));
 //
 //        // 7. 食堂文明督导
 //        activities.add(new Activity(7, "光盘行动监督员", "", "学生食堂",
 //                "倡导节约粮食、维持排队秩序",
-//                10, 6, "2025-05-11 11:00", "2025-05-11 12:30", 1, "completed", 2));
+//                10, 6, "2025-05-11 11:00", "2025-05-11 12:30", 1, "completed", "2"));
 //
 //        // 8. 防疫志愿服务
 //        activities.add(new Activity(8, "校园防疫先锋队", "", "校医院",
 //                "协助体温检测、防疫物资分发",
-//                8, 8, "2025-05-09 07:30", "2025-05-09 18:00", 5, "completed", 3));        return activities;
+//                8, 8, "2025-05-09 07:30", "2025-05-09 18:00", 5, "completed", "3"));        return activities;
 //    }
 }

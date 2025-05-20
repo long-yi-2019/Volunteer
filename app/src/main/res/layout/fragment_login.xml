@@ -5,51 +5,66 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="@drawable/background_gradient_green"
     android:gravity="center_horizontal"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
+    <!--图片logo-->
+    <ImageView
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="30dp"
+        android:src="@mipmap/logo" />
     <!-- 标题 -->
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
+        android:layout_marginBottom="50dp"
+        android:text="欢迎登录"
+        android:textSize="36sp"
+        android:textStyle="bold" />
     <!-- 用户名输入框 -->
     <EditText
         android:id="@+id/username_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="360dp"
+        android:layout_height="55dp"
         android:autofillHints=""
-        android:hint="用户名/手机号/邮箱"
+        android:hint="请输入用户名"
         android:inputType="text"
         android:paddingHorizontal="12dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_border"
-        android:imeOptions="actionNext" />
+        android:imeOptions="actionNext"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:drawableStart="@drawable/user"/>
+
 
     <!-- 密码输入框 + 显示隐藏按钮 -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="360dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         android:background="@drawable/edittext_border"
         android:paddingHorizontal="12dp"
         android:layout_marginBottom="16dp">
+
 
         <EditText
             android:id="@+id/password_edit_text"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:hint="密码"
+            android:hint="请输入密码"
             android:inputType="textPassword"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:background="@null" />
+            android:background="@null"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/pwd"/>
 
         <ImageView
             android:id="@+id/password_toggle"
@@ -65,8 +80,8 @@
     <!-- 身份选择下拉框 -->
     <Spinner
         android:id="@+id/identity_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="360dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/spinner_background"
         android:paddingHorizontal="12dp"
@@ -75,31 +90,41 @@
     <!-- 登录按钮 -->
     <TextView
         android:id="@+id/error_text"
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:textAlignment="center"
         android:textColor="@color/colorError" />
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_width="320dp"
+        android:layout_height="60dp"
         android:text="登录"
         android:textColor="@android:color/white"
+        android:textSize="24sp"
         android:backgroundTint="#3F51B5"
         android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="还没有注册？"
+        android:textSize="18sp"
+        android:layout_margin="10px"
+        android:textStyle="bold" />
 
     <!-- 注册链接 -->
     <TextView
         android:id="@+id/register_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注册"
+        android:text="马上注册"
         android:textColor="@android:color/holo_blue_dark"
         android:clickable="true"
         android:focusable="true"
-        android:padding="8dp"
+        android:textSize="20sp"
+        android:padding="16dp"
         android:textStyle="bold"/>
 
 </LinearLayout>
