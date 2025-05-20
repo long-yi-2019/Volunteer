@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,48 +8,85 @@
     app:cardPreventCornerOverlap="false"
     android:layout_margin="8dp">
 
+    <!-- 使用水平方向的 LinearLayout 实现左右结构 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- 活动名称 -->
-        <TextView
-            android:id="@+id/activity_name_text"
-            android:layout_width="wrap_content"
+        <!-- 左侧文字部分 -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="活动名称"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <!-- 地点 -->
-        <TextView
-            android:id="@+id/activity_location_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📍 地点：图书馆报告厅"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
+            <!-- 活动名称 -->
+            <TextView
+                android:id="@+id/activity_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="活动名称"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
 
-        <!-- 时间 -->
-        <TextView
-            android:id="@+id/activity_time_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📅 时间：2025-04-10 14:00"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp"/>
+            <!-- 地点 -->
+            <TextView
+                android:id="@+id/activity_location_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="地点：图书馆报告厅"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                app:drawableStartCompat="@drawable/position"
+                android:drawablePadding="8dp" />
 
-        <!-- 时长 -->
-        <TextView
-            android:id="@+id/activity_duration_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="⏱️ 时长：2小时"
-            android:textSize="14sp"/>
+            <!-- 时间 -->
+            <TextView
+                android:id="@+id/activity_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间：2025-04-10 14:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                app:drawableStartCompat="@drawable/date"
+                android:drawablePadding="8dp" />
 
+            <!-- 时长 -->
+            <TextView
+                android:id="@+id/activity_duration_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="志愿时长：2小时"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                app:drawableStartCompat="@drawable/time"
+                android:drawablePadding="8dp" />
+
+            <TextView
+                android:id="@+id/activity_user_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="人数：18 / 20"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                app:drawableStartCompat="@drawable/user_front"
+                android:drawablePadding="8dp" />
+        </LinearLayout>
+
+        <!-- 右侧图片 -->
+        <ImageView
+            android:id="@+id/activity_icon"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/logo"
+            android:contentDescription="活动图标"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

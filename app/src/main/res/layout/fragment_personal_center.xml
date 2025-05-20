@@ -1,79 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
-
-    <!-- 角色标题 -->
-    <TextView
-        android:id="@+id/role_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="角色：普通用户"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
-
-    <!-- 活动列表 - RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activities_recycler_view"
+    android:fillViewport="true"
+    android:background="@drawable/background_search_green">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/card_background"
-        android:padding="8dp"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="16dp"
+            android:elevation="2dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="15dp">
+            <!-- 头像区域 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                <ImageView
+                    android:id="@+id/user_avatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/girl_avatar"
+                    android:contentDescription="用户头像"
+                    />
 
-    <!-- RecyclerView 占位符（当不可见时显示） -->
-    <TextView
-        android:id="@+id/placeholder_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="暂无活动信息"
-        android:textColor="#888"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"
-        android:visibility="visible"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="尹慧"
+                    android:textColor="#000000"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"/>
+            </LinearLayout>
+            <!-- 角色标题 -->
+            <TextView
+                android:id="@+id/role_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份：普通用户"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="志愿时长：8h"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
 
-    <!-- 分割线 -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEE"
-        android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用户简介：这个用户很懒，还没填写个人简介。"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/personal_info_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="修改个人信息"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#2196F3"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center_horizontal"/>
 
-    <!-- 个人信息设置 -->
-    <Button
-        android:id="@+id/personal_info_button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="个人信息设置"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#3F51B5"
-        android:layout_marginBottom="12dp"/>
+                <Button
+                    android:id="@+id/publish_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="发布活动"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#4CAF50"
+                    android:visibility="gone"
+                    android:layout_marginLeft="10dp"
+                    />
+                <Button
+                    android:id="@+id/manage_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="管理志愿者"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#4CAF50"
+                    android:visibility="gone"
+                    android:layout_marginLeft="10dp"
+                    />
+            </LinearLayout>
 
-    <!-- 修改密码 -->
-    <Button
-        android:id="@+id/password_change_button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="修改密码"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#3F51B5"
-        android:layout_marginBottom="12dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的活动"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <!--点击后复用activity_search页面-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部已报名活动"
+                android:textSize="16sp"
+                android:textColor="#2196F3"
+                android:layout_marginLeft="140dp"/>
 
-    <!-- 发布活动按钮（默认隐藏） -->
-    <Button
-        android:id="@+id/publish_button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="发布活动"
-        android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#4CAF50"
-        android:visibility="gone"/>
+        </LinearLayout>
 
-</LinearLayout>
+        <!-- Activity Stats -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+            android:layout_marginRight="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="待参加"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingRight="3dp"/>
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:text="1"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:background="@drawable/circle_border_number"
+                android:layout_marginLeft="4dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="待审核"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingRight="3dp"/>
+                <TextView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:text="1"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:background="@drawable/circle_border_number"
+                    android:layout_marginLeft="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 活动列表 - RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/activities_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_background"
+            android:padding="8dp"
+            android:visibility="gone"/>
+
+        <!-- RecyclerView 占位符（当不可见时显示） -->
+        <TextView
+            android:id="@+id/placeholder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无活动信息"
+            android:textColor="#888"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="visible"/>
+
+        <!-- 分割线 -->
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:background="#EEE" />-->
+
+
+
+    </LinearLayout>
+</ScrollView>
