@@ -1,4 +1,5 @@
 package com.example.myapplication;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -526,6 +527,7 @@ public boolean login(String username, String password,String role) {
     /**
      * 根据用户名获取该用户报名的所有活动
      */
+    @SuppressLint("Range")
     public List<Activity> getActivitiesByUsername(String username) {
         List<Activity> activities = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -566,6 +568,7 @@ public boolean login(String username, String password,String role) {
 
 
 //模糊查询
+    @SuppressLint("Range")
     public List<Activity> searchActivitiesByName(String keyword) {
         List<Activity> activities = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -599,6 +602,46 @@ public boolean login(String username, String password,String role) {
         }
 
         return activities;
+    }
+
+    @SuppressLint("Range")
+    public Activity selectActivityByName(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM activity WHERE name = ?";
+        Activity activity = new Activity();
+        String[] selectionArgs = new String[]{name};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        try {
+            while (cursor.moveToNext()) {
+                activity.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                activity.setName(cursor.getString(cursor.getColumnIndex("name")));
+                activity.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                activity.setArea(cursor.getString(cursor.getColumnIndex("area")));
+                activity.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                activity.setCount(cursor.getInt(cursor.getColumnIndex("count")));
+                activity.setActualCount(cursor.getInt(cursor.getColumnIndex("actual_count")));
+                activity.setBeginTime(cursor.getString(cursor.getColumnIndex("begin_time")));
+                activity.setEndTime(cursor.getString(cursor.getColumnIndex("end_time")));
+                activity.setVolunteerTime(cursor.getInt(cursor.getColumnIndex("volunteer_time")));
+                activity.setState(cursor.getString(cursor.getColumnIndex("state")));
+                activity.setHostId(cursor.getString(cursor.getColumnIndex("hostid")));
+            }
+        } finally {
+            cursor.close();
+            db.close();
+        }
+        return activity;
+    }
+
+    public int getActivityNumberByUserName(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM registration WHERE username = ?";
+        String[] selectionArgs = new String[]{name};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        cursor.moveToFirst();
+        int cursorInt = cursor.getInt(0);
+        cursor.close();
+        return cursorInt;
     }
 }
 

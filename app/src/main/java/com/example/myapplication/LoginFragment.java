@@ -86,7 +86,6 @@ public class LoginFragment extends Fragment {
                         navController.navigate(R.id.action_loginFragment_to_activitySearchFragment);;
                     } else {
                         errorText.setText("用户名或密码或角色错误");
-                        return;
                     }
 
             // 模拟登录，导航到活动搜索

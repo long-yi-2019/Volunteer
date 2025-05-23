@@ -32,6 +32,7 @@ public class PersonalInfoFragment extends Fragment {
         EditText usernameEditText = view.findViewById(R.id.username_edit_text);
         EditText nameEditText = view.findViewById(R.id.name_edit_text);
         Button saveButton = view.findViewById(R.id.save_button);
+        Button passWordChangeButton = view.findViewById(R.id.password_change_button);
         errorText= view.findViewById(R.id.error_text);
         // 初始化ViewModel
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
@@ -80,6 +81,7 @@ public class PersonalInfoFragment extends Fragment {
                    {
                        viewModel.setUsername(newUsername);
 
+
                    }
                    else {
                        errorText.setText("用户名已存在");
@@ -92,6 +94,7 @@ public class PersonalInfoFragment extends Fragment {
             navController.popBackStack(); // 返回上一页
 //
         });
+        passWordChangeButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalInfoFragment_to_passwordChangeFragment));
 
         return view;
     }
@@ -111,7 +114,7 @@ public class PersonalInfoFragment extends Fragment {
 
         if (rowsAffected > 0) {
             // 更新成功，返回上一页
-
+            System.out.println(rowsAffected);
            return true;
         } else {
             return false;

@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.myapplication.Entity.Activity;
+
 public class ActivityDetailsFragment extends Fragment {
     String currentUser;
     int activityId;
@@ -32,16 +34,23 @@ public class ActivityDetailsFragment extends Fragment {
         TextView locationTextView = view.findViewById(R.id.activity_location_text);
         TextView timeTextView = view.findViewById(R.id.activity_time_text);
         TextView durationTextView = view.findViewById(R.id.activity_duration_text);
+        TextView descriptionTextView = view.findViewById(R.id.activity_description_text);
         Button bookButton = view.findViewById(R.id.book_button);
         TextView errorText = view.findViewById(R.id.error_text);
         // 获取传递的数据
         Bundle args = getArguments();
         if (args != null) {
             nameTextView.setText(args.getString("activity_name", "未知活动"));
-            locationTextView.setText(args.getString("activity_location", "未知地点"));
-            timeTextView.setText(args.getString("activity_time", "未知时间"));
-            durationTextView.setText(args.getString("activity_duration", "未知时长"));
+            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+            Activity activityName = dbHelper.selectActivityByName(args.getString("activity_name"));
+            descriptionTextView.setText(activityName.getContent());
+            locationTextView.setText(activityName.getArea());
+            timeTextView.setText(activityName.getBeginTime());
+            durationTextView.setText(activityName.getEndTime());
+            dbHelper.close();
         }
+
+
 
         // 预约按钮
         bookButton.setOnClickListener(v -> {
@@ -68,10 +77,9 @@ public class ActivityDetailsFragment extends Fragment {
                 case -2:  errorText.setText("活动已结束"); return;
                 default:  errorText.setText("预约失败");return;
             }
+            db.close();
 
         });
-
-
         return view;
     }
 }

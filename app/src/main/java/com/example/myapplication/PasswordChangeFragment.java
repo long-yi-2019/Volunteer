@@ -69,9 +69,7 @@ public class PasswordChangeFragment extends Fragment {
                 navController.popBackStack(); // 返回上一页
             } else {
                 errorText.setText("旧密码不正确");
-                return;
             }
-
         });
 
         return view;
