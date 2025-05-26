@@ -1,122 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@drawable/background_search_green">
-
-    <!-- 标题 -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="发布活动"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"/>
-
-    <!-- 活动名称 -->
-    <EditText
-        android:id="@+id/activity_name_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="活动名称"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:background="@drawable/edittext_border"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- 活动时间 -->
-    <EditText
-        android:id="@+id/activity_time_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="活动时间"
-        android:inputType="datetime"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:background="@drawable/edittext_border"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- 所需人数 -->
-    <EditText
-        android:id="@+id/activity_people_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="所需人数"
-        android:inputType="number"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:background="@drawable/edittext_border"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- 活动时长 -->
-    <EditText
-        android:id="@+id/activity_duration_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="活动时长（小时）"
-        android:inputType="numberDecimal"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:background="@drawable/edittext_border"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- 活动简介 -->
-    <EditText
-        android:id="@+id/activity_description_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:gravity="top"
-        android:padding="12dp"
-        android:background="@drawable/edittext_border"
-        android:hint="活动简介"
-        android:inputType="textMultiLine"
-        android:layout_marginBottom="24dp"/>
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginBottom="24dp">
-        <FrameLayout
-            android:id="@+id/upload_image_container"
+        android:padding="24dp"
+        android:background="@drawable/background_search_green">
+
+        <!-- 标题 -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="wrap_content"
+            android:text="发布活动"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"/>
+
+        <!-- 活动名称 -->
+        <EditText
+            android:id="@+id/activity_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="活动名称"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:background="@drawable/edittext_border"
-            android:gravity="center"
-            android:padding="16dp">
+            android:layout_marginBottom="16dp"/>
 
-            <ImageView
-                android:id="@+id/upload_image_view"
+        <!-- 活动时间 -->
+        <EditText
+            android:id="@+id/activity_time_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="活动时间"
+            android:inputType="datetime"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 活动时间 -->
+        <EditText
+            android:id="@+id/activity_position_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="活动地点"
+            android:inputType="datetime"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 所需人数 -->
+        <EditText
+            android:id="@+id/activity_people_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="所需人数"
+            android:inputType="number"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 活动时长 -->
+        <EditText
+            android:id="@+id/activity_duration_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="活动时长（小时）"
+            android:inputType="numberDecimal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/edittext_border"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 活动简介 -->
+        <EditText
+            android:id="@+id/activity_description_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:gravity="top"
+            android:padding="12dp"
+            android:background="@drawable/edittext_border"
+            android:hint="活动简介"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="24dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
+            <FrameLayout
+                android:id="@+id/upload_image_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/upload"
-                />
+                android:layout_height="160dp"
+                android:background="@drawable/edittext_border"
+                android:gravity="center"
+                android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="点击上传图片，添加活动照片"
-                android:textSize="16sp"
-                android:textColor="#666"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"/>
-        </FrameLayout>
+                <ImageView
+                    android:id="@+id/upload_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/upload"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击上传图片，添加活动照片"
+                    android:textSize="16sp"
+                    android:textColor="#666"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"/>
+            </FrameLayout>
+        </LinearLayout>
+        <!-- 发布按钮 -->
+        <Button
+            android:id="@+id/publish_button"
+            android:layout_width="320dp"
+            android:layout_height="48dp"
+            android:text="立即发布"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:backgroundTint="#3F51B5"
+            android:elevation="4dp"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
-    <!-- 发布按钮 -->
-    <Button
-        android:id="@+id/publish_button"
-        android:layout_width="320dp"
-        android:layout_height="48dp"
-        android:text="立即发布"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:backgroundTint="#3F51B5"
-        android:elevation="4dp"
-        android:layout_gravity="center_horizontal"/>
-
-</LinearLayout>
+</ScrollView>
