@@ -40,6 +40,7 @@ public class PersonalCenterFragment extends Fragment {
         TextView readyPointNumber = view.findViewById(R.id.ready_point_number);
 //        Button passwordChangeButton = view.findViewById(R.id.password_change_button);
         Button publishButton = view.findViewById(R.id.publish_button);
+        TextView placeholderText = view.findViewById(R.id.placeholder_text);
 
         // 初始化ViewModel
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
@@ -60,17 +61,27 @@ public class PersonalCenterFragment extends Fragment {
             if (Username != null) {
                 List<Activity> activities = dbHelper.getActivitiesByUsername(Username);
 //                List<Activity> activities = getSampleActivities();
-                adapter = new ActivityAdapter(activities, activity -> {
-                    // 导航到活动详情
-                    Bundle bundle = new Bundle();
-                    bundle.putString("activity_name", activity.getName());
-                    bundle.putString("activity_location", activity.getArea());
-                    bundle.putString("activity_time", activity.getBeginTime());
-                    bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
-                    bundle.putInt("activity_id", activity.getId());
-                    Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
-                });
-                recyclerView.setAdapter(adapter);
+                if (activities != null && !activities.isEmpty()) {
+                    // 有活动，隐藏占位符，显示 RecyclerView
+                    placeholderText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    adapter = new ActivityAdapter(activities, activity -> {
+                        // 导航到活动详情
+                        Bundle bundle = new Bundle();
+                        bundle.putString("activity_name", activity.getName());
+                        bundle.putString("activity_location", activity.getArea());
+                        bundle.putString("activity_time", activity.getBeginTime());
+                        bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
+                        bundle.putInt("activity_id", activity.getId());
+                        Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
+                    });
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    // 没有活动，显示占位符，隐藏 RecyclerView
+                    placeholderText.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+
             }
         });
 
