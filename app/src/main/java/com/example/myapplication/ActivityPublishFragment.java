@@ -1,12 +1,26 @@
 package com.example.myapplication;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -17,7 +31,81 @@ import androidx.navigation.Navigation;
 import com.example.myapplication.Entity.Activity;
 import com.example.myapplication.Entity.TimeValidator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class ActivityPublishFragment extends Fragment {
+
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+
+    String url = null;
+
+    private void setupImagePicker() {
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == requireActivity().RESULT_OK && result.getData() != null) {
+                        Uri imageUri = result.getData().getData();
+                        String fileName = saveImageToLocal(imageUri);
+                        ImageView uploadImageView = getView().findViewById(R.id.upload_image_view);
+                        uploadImageView.setImageURI(imageUri);
+                        url = fileName;
+                        // TODO: 这里你可以保存 imageUri 到变量用于后续上传或存储
+
+                    }
+                }
+        );
+    }
+
+    private String saveImageToLocal(Uri uri) {
+        try {
+            ContentResolver resolver = requireContext().getContentResolver();
+            InputStream inputStream = resolver.openInputStream(uri);
+
+            if (inputStream == null) {
+                Toast.makeText(requireContext(), "无法读取图片", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+
+            // 创建目标文件名（你可以用时间戳或 UUID）
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+            String fileName = "image_" + timeStamp + ".jpg";
+
+            // 获取应用私有目录下的图片文件夹
+            File dir = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "AppImages");
+            if (!dir.exists()) {
+                dir.mkdirs(); // 创建文件夹
+            }
+
+            File file = new File(dir, fileName);
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            // 复制图片数据到文件
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+
+            // 返回文件名，用于存入数据库
+            return fileName;
+
+        } catch (IOException e) {
+            Log.d("error", String.valueOf(e));
+            Toast.makeText(requireContext(), "保存图片失败", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 
     @Nullable
     @Override
@@ -31,7 +119,11 @@ public class ActivityPublishFragment extends Fragment {
         EditText durationEditText = view.findViewById(R.id.activity_duration_edit_text);
         EditText descriptionEditText = view.findViewById(R.id.activity_description_edit_text);
         Button publishButton = view.findViewById(R.id.publish_button);
-
+        ImageView uploadImageView = view.findViewById(R.id.upload_image_view);
+        FrameLayout uploadContainer = view.findViewById(R.id.upload_image_container);
+        setupImagePicker();
+        timeEditText.setOnClickListener(v -> showDateTimePicker(timeEditText));
+        uploadContainer.setOnClickListener(v -> openImageChooser());
         // 发布按钮
         publishButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString();
@@ -39,6 +131,7 @@ public class ActivityPublishFragment extends Fragment {
             String people = peopleEditText.getText().toString();
             String duration = durationEditText.getText().toString();
             String description = descriptionEditText.getText().toString();
+            String imageUrl = (url != null) ? url : null;
 
 
             if (name.isEmpty() || time.isEmpty() || people.isEmpty() || duration.isEmpty() || description.isEmpty()) {
@@ -66,6 +159,7 @@ public class ActivityPublishFragment extends Fragment {
                 newActivity.setCount(count);
                 newActivity.setContent(description);
                 newActivity.setVolunteerTime(volunteertime);
+                newActivity.setPicture(imageUrl);
 
 
                 // 5. 从ViewModel获取主办方ID
@@ -97,4 +191,43 @@ public class ActivityPublishFragment extends Fragment {
 
         return view;
     }
+
+    private void showDateTimePicker(EditText timeEditText) {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(
+                            requireContext(),
+                            (timePicker, hourOfDay, minute) -> {
+                                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                calendar.set(Calendar.MINUTE, minute);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                                timeEditText.setText(sdf.format(calendar.getTime()));
+                            },
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            true
+                    );
+                    timePickerDialog.show();
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+
+
+    private void openImageChooser() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
+
 }

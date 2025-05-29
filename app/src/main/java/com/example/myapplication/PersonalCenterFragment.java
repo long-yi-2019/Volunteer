@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -98,7 +99,7 @@ public class PersonalCenterFragment extends Fragment {
                 s="管理员";
             }
             roleTextView.setText("角色: " + s);
-            recyclerView.setVisibility(role.equals("Volunteer") ? View.VISIBLE : View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             publishButton.setVisibility(role.equals("Organizer") || role.equals("Admin") ? View.VISIBLE : View.GONE);
             verifyNumber.setVisibility(role.equals("Admin") ? View.VISIBLE : View.GONE);
         });

@@ -35,13 +35,17 @@
         <EditText
             android:id="@+id/activity_time_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="活动时间"
-            android:inputType="datetime"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:layout_height="49dp"
+            android:layout_marginBottom="16dp"
+            android:autofillHints=""
             android:background="@drawable/edittext_border"
-            android:layout_marginBottom="16dp"/>
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="活动时间"
+            android:inputType="none"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp" />
 
         <!-- 活动时间 -->
         <EditText
