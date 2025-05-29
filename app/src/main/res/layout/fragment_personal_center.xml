@@ -81,11 +81,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="修改个人信息"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="#2196F3"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center_horizontal"/>
+                <Button
+                    android:id="@+id/volunteer_record_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="提交时长记录"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:backgroundTint="#2196F3"
                     android:textColor="#FFFFFF"
                     android:textAllCaps="false"
+                    android:visibility="visible"
                     android:layout_gravity="center_horizontal"/>
 
                 <Button
@@ -147,6 +161,7 @@
             android:layout_marginBottom="16dp"
             >
             <LinearLayout
+                android:id="@+id/ready_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -206,7 +221,6 @@
             android:background="@drawable/card_background"
             android:padding="8dp"
             android:visibility="gone"/>
-
         <!-- RecyclerView 占位符（当不可见时显示） -->
         <TextView
             android:id="@+id/placeholder_text"
@@ -219,6 +233,29 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
             android:visibility="visible"/>
+
+        <!-- 志愿时长记录列表 - RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/records_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_background"
+            android:padding="8dp"
+            android:visibility="gone"/>
+
+        <!-- RecyclerView 占位符（当不可见时显示） -->
+        <TextView
+            android:id="@+id/record_placeholder_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无提交信息"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#888"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone"/>
 
         <!-- 分割线 -->
 <!--        <View-->

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="730dp"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/background_search_green">
+
+        <!-- 活动名称 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="志愿记录详情"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <!--认证图片-->
+        <ImageView
+            android:layout_width="340dp"
+            android:layout_height="220dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:src="@mipmap/von_activity"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/activity_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动名称：春季读书分享会"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <!-- 时间 -->
+        <TextView
+            android:id="@+id/record_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交时间：2025-04-10 14:00"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp"
+            app:drawableStartCompat="@drawable/date"
+            android:drawablePadding="8dp" />
+
+        <!-- 时长 -->
+        <TextView
+            android:id="@+id/record_duration_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="志愿时长：2小时"
+            android:textSize="18sp"
+            android:layout_marginBottom="20dp"
+            app:drawableStartCompat="@drawable/time"
+            android:drawablePadding="8dp" />
+
+        <TextView
+            android:id="@+id/record_state_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="通过"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="50dp"
+            android:drawablePadding="8dp"
+            style="@style/StateTextApproved"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="审核建议"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/record_description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:text="这是一场关于春季读书的精彩分享活动，欢迎大家积极参与。活动将围绕经典文学作品展开讨论，并提供丰富的互动环节。"
+            android:textSize="18sp"
+            android:textColor="#333333"
+            android:lineSpacingMultiplier="1.2"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:visibility="gone"/>
+
+
+
+
+    </LinearLayout>
+</ScrollView>
