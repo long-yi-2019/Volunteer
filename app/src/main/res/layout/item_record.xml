@@ -68,7 +68,7 @@
 
         <!-- 右侧图片 -->
         <ImageView
-            android:id="@+id/activity_icon"
+            android:id="@+id/record_icon"
             android:layout_width="144dp"
             android:layout_height="144dp"
             android:layout_gravity="center_vertical"
