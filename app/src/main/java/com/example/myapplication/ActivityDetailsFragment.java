@@ -70,8 +70,7 @@ public class ActivityDetailsFragment extends Fragment {
                 case 1:
                     Toast.makeText(requireContext(), "预约成功" , Toast.LENGTH_SHORT).show();
                     NavController navController = Navigation.findNavController(view);
-                    navController.popBackStack(); // 返回上一页
-                    break;
+                    navController.navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment); break;
                 case 0:  errorText.setText("您已预约过该活动");return;
                 case -1:  errorText.setText("活动名额已满"); return;
                 case -2:  errorText.setText("活动已结束"); return;

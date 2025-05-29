@@ -64,7 +64,6 @@ public class PasswordChangeFragment extends Fragment {
             DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
             boolean success = dbHelper.changePassword(Username, oldPassword, newPassword);
             if (success) {
-                viewModel.setPassWord(newPassword);
                 Toast.makeText(requireContext(), "密码修改成功", Toast.LENGTH_SHORT).show();      NavController navController = Navigation.findNavController(view);
                 navController.popBackStack(); // 返回上一页
             } else {
