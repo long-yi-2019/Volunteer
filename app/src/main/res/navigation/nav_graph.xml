@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_personalCenterFragment_to_activityDetailsFragment"
             app:destination="@id/activityDetailsFragment"/>
+        <action
+            android:id="@+id/action_personalCenterFragment_to_volunteerRecordFragment"
+            app:destination="@id/volunteerRecordFragment"/>
     </fragment>
 
     <fragment
@@ -67,5 +70,7 @@
     <fragment
         android:id="@+id/activityPublishFragment"
         android:name="com.example.myapplication.ActivityPublishFragment"/>
-
+    <fragment
+        android:id="@+id/volunteerRecordFragment"
+        android:name="com.example.myapplication.VolunteerRecordFragment"/>
 </navigation>

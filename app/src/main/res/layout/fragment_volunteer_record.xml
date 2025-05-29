@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/background_search_green">
+
+    <!-- 标题 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="提交时长记录"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"/>
+
+    <!-- 活动选择下拉框 -->
+    <Spinner
+        android:id="@+id/activity_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginBottom="20dp"
+        app:popupPrompt="请选择已参加的活动"
+        android:background="@drawable/spinner_background"
+        android:paddingHorizontal="12dp"
+        android:spinnerMode="dropdown"/>
+
+    <!-- 志愿时长时间 -->
+    <EditText
+        android:id="@+id/activity_time_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="志愿时长（小时）"
+        android:inputType="datetime"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:background="@drawable/edittext_border"
+        android:layout_marginBottom="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="24dp">
+        <FrameLayout
+            android:id="@+id/upload_image_container"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@drawable/edittext_border"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/upload_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/upload"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点击上传图片，添加认证凭证"
+                android:textSize="16sp"
+                android:textColor="#666"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- 发布按钮 -->
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:text="立即提交"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:backgroundTint="#3F51B5"
+        android:elevation="4dp"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>
