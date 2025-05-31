@@ -52,7 +52,10 @@
             app:destination="@id/activityDetailsFragment"/>
         <action
             android:id="@+id/action_personalCenterFragment_to_volunteerRecordFragment"
-            app:destination="@id/volunteerRecordFragment"/>
+            app:destination="@id/recordDetailsFragment"/>
+        <action
+            android:id="@+id/action_personalCenterFragment_to_recordListFragment"
+            app:destination="@id/recordList"/>
     </fragment>
 
     <fragment
@@ -71,9 +74,21 @@
         android:id="@+id/activityPublishFragment"
         android:name="com.example.myapplication.ActivityPublishFragment"/>
     <fragment
-        android:id="@+id/volunteerRecordFragment"
+        android:id="@+id/recordDetailsFragment"
         android:name="com.example.myapplication.VolunteerRecordFragment"/>
     <fragment
         android:id="@+id/allActivity"
-        android:name="com.example.myapplication.AllActivityFragment"/>
+        android:name="com.example.myapplication.AllActivityFragment">
+        <action
+            android:id="@+id/action_allActivityFragment_to_activityDetailsFragment"
+            app:destination="@id/activityDetailsFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/recordList"
+        android:name="com.example.myapplication.RecordListFragment">
+        <action
+            android:id="@+id/action_recordListFragment_to_recordDetailsFragment"
+            app:destination="@id/recordDetailsFragment"/>
+    </fragment>
+
 </navigation>

@@ -40,6 +40,17 @@
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
+        <TextView
+            android:id="@+id/user_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名：xxx"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:drawablePadding="8dp"
+            app:drawableStartCompat="@drawable/user"/>
+
         <!-- 时间 -->
         <TextView
             android:id="@+id/record_time_text"
@@ -72,6 +83,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="50dp"
             android:drawablePadding="8dp"
+            android:visibility="visible"
             style="@style/StateTextApproved"/>
 
         <TextView
@@ -95,7 +107,41 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:visibility="gone"/>
+        <LinearLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:paddingHorizontal="16dp"
+            android:weightSum="2"
+            android:visibility="gone">
 
+            <Button
+                android:id="@+id/approve_button"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="通过"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4CAF50"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/reject_button"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="拒绝"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#F44336"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
 
 
 
