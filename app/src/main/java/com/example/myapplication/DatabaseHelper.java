@@ -395,29 +395,43 @@ public boolean login(String username, String password,String role) {
     public List<Activity> getActivityList() {
         List<Activity> activities = new ArrayList<>();
         Cursor cursor = getAllActivitiesOrderByTime();
-        // Get column indices once
+
+        // 获取列索引
         int idIndex = cursor.getColumnIndex("id");
         int nameIndex = cursor.getColumnIndex("name");
+        int pictureIndex = cursor.getColumnIndex("picture");
+        int areaIndex = cursor.getColumnIndex("area");
+        int contentIndex = cursor.getColumnIndex("content");
+        int countIndex = cursor.getColumnIndex("count");
+        int actualCountIndex = cursor.getColumnIndex("actual_count");
         int beginTimeIndex = cursor.getColumnIndex("begin_time");
+        int endTimeIndex = cursor.getColumnIndex("end_time");
+        int volunteerTimeIndex = cursor.getColumnIndex("volunteer_time");
+        int stateIndex = cursor.getColumnIndex("state");
+        int hostIdIndex = cursor.getColumnIndex("hostid");
+
         while (cursor.moveToNext()) {
             Activity activity = new Activity();
-
-            // Only set values if columns exist
-            if (idIndex != -1) {
-                activity.setId(cursor.getInt(idIndex));
-            }
-            if (nameIndex != -1) {
-                activity.setName(cursor.getString(nameIndex));
-            }
-            if (beginTimeIndex != -1) {
-                activity.setBeginTime(cursor.getString(beginTimeIndex));
-            }
+            if (idIndex != -1) activity.setId(cursor.getInt(idIndex));
+            if (nameIndex != -1) activity.setName(cursor.getString(nameIndex));
+            if (pictureIndex != -1) activity.setPicture(cursor.getString(pictureIndex));
+            if (areaIndex != -1) activity.setArea(cursor.getString(areaIndex));
+            if (contentIndex != -1) activity.setContent(cursor.getString(contentIndex));
+            if (countIndex != -1) activity.setCount(cursor.getInt(countIndex));
+            if (actualCountIndex != -1) activity.setActualCount(cursor.getInt(actualCountIndex));
+            if (beginTimeIndex != -1) activity.setBeginTime(cursor.getString(beginTimeIndex));
+            if (endTimeIndex != -1) activity.setEndTime(cursor.getString(endTimeIndex));
+            if (volunteerTimeIndex != -1) activity.setVolunteerTime(cursor.getInt(volunteerTimeIndex));
+            if (stateIndex != -1) activity.setState(cursor.getString(stateIndex));
+            if (hostIdIndex != -1) activity.setHostId(cursor.getString(hostIdIndex));
 
             activities.add(activity);
         }
+
         cursor.close();
         return activities;
     }
+
     /**
      * 更新活动状态
      */

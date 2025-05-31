@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -28,7 +29,8 @@ public class ActivityDetailsFragment extends Fragment {
              activityId = getArguments().getInt("activity_id", -1); // -1是默认值
         }
         View view = inflater.inflate(R.layout.fragment_activity_details, container, false);
-
+        // 初始化ViewModel
+        VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
         // 绑定视图
         TextView nameTextView = view.findViewById(R.id.activity_name_text);
         TextView locationTextView = view.findViewById(R.id.activity_location_text);
@@ -37,6 +39,9 @@ public class ActivityDetailsFragment extends Fragment {
         TextView descriptionTextView = view.findViewById(R.id.activity_description_text);
         Button bookButton = view.findViewById(R.id.book_button);
         TextView errorText = view.findViewById(R.id.error_text);
+        Button approveButton = view.findViewById(R.id.approve_button);
+        Button rejectButton = view.findViewById(R.id.reject_button);
+        LinearLayout buttonContainer = view.findViewById(R.id.button_container);
         // 获取传递的数据
         Bundle args = getArguments();
         if (args != null) {
@@ -56,8 +61,7 @@ public class ActivityDetailsFragment extends Fragment {
         bookButton.setOnClickListener(v -> {
 //            Toast.makeText(requireContext(), "已预约: " + nameTextView.getText(), Toast.LENGTH_SHORT).show();
             // TODO: 实现预约逻辑
-            // 初始化ViewModel
-            VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
+
             // 名字
             viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
                 currentUser = name;
@@ -77,6 +81,13 @@ public class ActivityDetailsFragment extends Fragment {
                 default:  errorText.setText("预约失败");return;
             }
             db.close();
+
+        });
+
+
+        //如果是志愿者，预约活动后，则隐藏bookButton
+        //如果是管理员，隐藏bookButton，显示buttonContainer，编写approveButton和rejectButton的点击事件
+        viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
 
         });
         return view;

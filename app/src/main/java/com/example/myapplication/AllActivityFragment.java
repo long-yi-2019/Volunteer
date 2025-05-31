@@ -54,7 +54,7 @@ public class AllActivityFragment extends Fragment {
                 bundle.putString("activity_time", activity.getBeginTime());
                 bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
                 bundle.putInt("activity_id", activity.getId());
-                Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_allActivityFragment_to_activityDetailsFragment, bundle);
             });
             recyclerView.setAdapter(adapter);
 
