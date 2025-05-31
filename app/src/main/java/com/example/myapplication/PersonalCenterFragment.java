@@ -1,12 +1,14 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +20,11 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Entity.Account;
 import com.example.myapplication.Entity.Activity;
+import com.example.myapplication.Entity.Record;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -42,7 +48,12 @@ public class PersonalCenterFragment extends Fragment {
 //        Button passwordChangeButton = view.findViewById(R.id.password_change_button);
         Button publishButton = view.findViewById(R.id.publish_button);
         TextView placeholderText = view.findViewById(R.id.placeholder_text);
-
+        View readyNumberLayout = view.findViewById(R.id.ready_number);
+        RecyclerView recordsRecyclerView = view.findViewById(R.id.records_recycler_view);
+        TextView recordTextView  =view.findViewById(R.id.record_placeholder_text);
+        Button volunteerRecordButton = view.findViewById(R.id.volunteer_record_button);
+        TextView realName =  view.findViewById(R.id.user_real_name);
+        TextView allActivity =  view.findViewById(R.id.all_activity);
         // 初始化ViewModel
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
         // 名字
@@ -51,8 +62,9 @@ public class PersonalCenterFragment extends Fragment {
             System.out.println("!!!!!!!!!!"+Username);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+        recordsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        setupActivityRecyclerView(viewModel.getUsername().toString(),  recyclerView, placeholderText, view);
 
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
             Username = name;
@@ -60,33 +72,32 @@ public class PersonalCenterFragment extends Fragment {
 
             // 在这里执行依赖用户名的操作
             if (Username != null) {
-                List<Activity> activities = dbHelper.getActivitiesByUsername(Username);
-//                List<Activity> activities = getSampleActivities();
-                if (activities != null && !activities.isEmpty()) {
-                    // 有活动，隐藏占位符，显示 RecyclerView
-                    placeholderText.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    adapter = new ActivityAdapter(activities, activity -> {
-                        // 导航到活动详情
-                        Bundle bundle = new Bundle();
-                        bundle.putString("activity_name", activity.getName());
-                        bundle.putString("activity_location", activity.getArea());
-                        bundle.putString("activity_time", activity.getBeginTime());
-                        bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
-                        bundle.putInt("activity_id", activity.getId());
-                        Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
-                    });
-                    recyclerView.setAdapter(adapter);
-                } else {
-                    // 没有活动，显示占位符，隐藏 RecyclerView
-                    placeholderText.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                }
+                setupActivityRecyclerView(Username,  recyclerView, placeholderText, view);
+                readyNumberLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 点击 "待参加" 区域执行的操作
+//                        Toast.makeText(getActivity(), "待参加区域被点击", Toast.LENGTH_SHORT).show();
+                        recordsRecyclerView.setVisibility(View.GONE);
+                        recordTextView.setVisibility(View.GONE);
+                        setupActivityRecyclerView(Username,  recyclerView, placeholderText, view);
+                    }
+                });
+
+                verifyNumber.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 点击 "待审核" 区域执行的操作
+//                        Toast.makeText(getActivity(), "待审核区域被点击", Toast.LENGTH_SHORT).show();
+                        recyclerView.setVisibility(View.GONE);
+                        placeholderText.setVisibility(View.GONE);
+                        setupRecordRecyclerView(Username, recordsRecyclerView, recordTextView, view);
+                    }
+                });
+
 
             }
         });
-
-
 
         // 设置角色显示
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
@@ -95,19 +106,31 @@ public class PersonalCenterFragment extends Fragment {
                 s = "志愿者";
             } else if (role.equals("Organizer")) {
                 s="组织者";
+                allActivity.setText("全部已发布活动");
+
             }else {
                 s="管理员";
             }
             roleTextView.setText("角色: " + s);
-            recyclerView.setVisibility(View.VISIBLE);
+            volunteerRecordButton.setVisibility(role.equals("Volunteer")?View.VISIBLE:View.GONE);
             publishButton.setVisibility(role.equals("Organizer") || role.equals("Admin") ? View.VISIBLE : View.GONE);
             verifyNumber.setVisibility(role.equals("Admin") ? View.VISIBLE : View.GONE);
         });
+
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
+            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
             userName.setText(name);
-            readyPointNumber.setText(String.valueOf(dbHelper.getActivityNumberByUserName(name)));
+            System.out.println(dbHelper.selectAccount(name).toString());
+            if( dbHelper.selectAccount(name).getName() != null){
+                realName.setText("姓名："+ dbHelper.selectAccount(name).getName());
+            }else{
+                realName.setText("姓名：暂无，请登记" );
+            }
+
             System.out.println(dbHelper.getActivityNumberByUserName(name));
+            readyPointNumber.setText(String.valueOf(dbHelper.getActivityNumberByUserName(name)));
         });
+
 
 
 
@@ -121,7 +144,50 @@ public class PersonalCenterFragment extends Fragment {
         // 导航按钮
         personalInfoButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_personalInfoFragment));
         publishButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityPublishFragment));
-
+        volunteerRecordButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_volunteerRecordFragment));
+        allActivity.setOnClickListener(v->Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityAllActivityFragment));
         return view;
     }
+    private void setupActivityRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
+        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+        List<Activity> activities = dbHelper.getActivitiesByUsername(username);
+        if (activities != null && !activities.isEmpty()) {
+            placeholderText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            ActivityAdapter adapter = new ActivityAdapter(activities, activity -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("activity_name", activity.getName());
+                bundle.putString("activity_location", activity.getArea());
+                bundle.putString("activity_time", activity.getBeginTime());
+                bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
+                bundle.putInt("activity_id", activity.getId());
+                Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
+            });
+
+            recyclerView.setAdapter(adapter);
+        } else {
+            placeholderText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+    private void setupRecordRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
+        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+        List<Record> records = dbHelper.selectRecordByUserName(username);
+        if (records != null && !records.isEmpty()) {
+            placeholderText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            RecordAdapter adapter = new RecordAdapter(records, record -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("activity_name", record.getActivityName());
+                bundle.putString("activity_location", record.getActivityName());
+                bundle.putString("activity_time", record.getDate().toString());
+                bundle.putInt("record_id",record.getId());
+            });
+            recyclerView.setAdapter(adapter);
+        } else {
+            placeholderText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+
 }

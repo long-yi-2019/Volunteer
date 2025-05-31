@@ -9,6 +9,7 @@ public class VolunteerViewModel extends ViewModel {
 
     private final MutableLiveData<String> userName = new MutableLiveData<>("");
     private final MutableLiveData<String> passWord = new MutableLiveData<>("");
+
     public void setSelectedIdentity(String identity) {
         selectedIdentity.setValue(identity);
     }
@@ -39,4 +40,9 @@ public class VolunteerViewModel extends ViewModel {
     public MutableLiveData<String> getPassWord() {
         return passWord;
     }
+
+    public MutableLiveData<String> getUserName() {
+        return userName;
+    }
+
 }

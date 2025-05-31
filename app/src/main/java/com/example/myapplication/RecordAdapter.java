@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Entity.Activity;
 
-import java.lang.Record;
 import java.util.List;
-
+import com.example.myapplication.Entity.Record;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
     private List<Record> records;
     private RecordAdapter.OnRecordClickListener listener;
@@ -28,7 +27,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @NonNull
     @Override
-    public RecordAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record, parent, false);
         return new RecordAdapter.ViewHolder(view);
     }
@@ -36,11 +35,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
         Record record = records.get(position);
-//        holder.nameTextView.setText(record.getName());
-//        holder.locationTextView.setText(record.getArea());
-//        holder.timeTextView.setText(record.getBeginTime());
-//        holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()));
-//        holder.itemView.setOnClickListener(v -> listener.onRecordClick(record));
+        holder.activityNameTextView.setText(record.getActivityName());
+        holder.timeTextView.setText(record.getDate().toString());
+        holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()));
+        holder.itemView.setOnClickListener(v -> listener.onRecordClick(record));
     }
 
     @Override
@@ -49,17 +47,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
-        TextView locationTextView;
+        TextView activityNameTextView;
         TextView timeTextView;
         TextView durationTextView;
-
         ViewHolder(View itemView) {
             super(itemView);
-//            nameTextView = itemView.findViewById(R.id.record_name_text);
-//            locationTextView = itemView.findViewById(R.id.record_location_text);
-//            timeTextView = itemView.findViewById(R.id.record_time_text);
-//            durationTextView = itemView.findViewById(R.id.record_duration_text);
+            activityNameTextView = itemView.findViewById(R.id.record_activityName_text);
+            timeTextView = itemView.findViewById(R.id.record_time_text);
+            durationTextView = itemView.findViewById(R.id.record_duration_text);
         }
     }
 

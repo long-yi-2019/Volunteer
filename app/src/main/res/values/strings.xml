@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="prompt_select_activity">请选择已参加的活动</string>
+
 </resources>

@@ -235,6 +235,46 @@ public boolean login(String username, String password,String role) {
             db.close();
         }
     }
+    public Account selectAccount(String username){
+        SQLiteDatabase db = getReadableDatabase();
+        Account account = null;
+
+        Cursor cursor = null;
+        try {
+            // 查询 account 表中 username 匹配的记录
+            cursor = db.query(
+                    "account",                  // 表名
+                    null,                       // 返回所有列
+                    "username = ?",             // WHERE 条件
+                    new String[]{username},     // WHERE 参数
+                    null, null, null
+            );
+
+            // 如果查到了数据
+            if (cursor != null && cursor.moveToFirst()) {
+                account = new Account();
+                // 从数据库中读取字段值，并设置到 Account 对象中
+                account.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                account.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("username")));
+                account.setName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                account.setPassword(cursor.getString(cursor.getColumnIndexOrThrow("password")));
+                account.setRole(cursor.getString(cursor.getColumnIndexOrThrow("role")));
+                account.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow("avatar")));
+                account.setPhone(cursor.getString(cursor.getColumnIndexOrThrow("phone")));
+                account.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return account;
+
+    }
     // ==================== Activity表操作 ====================
 
     /**
@@ -728,7 +768,7 @@ public boolean login(String username, String password,String role) {
 
                     int timeIndex = cursor.getColumnIndex("volunteer_time");
                     if (timeIndex != -1) {
-                        record.setVolunteerTime(cursor.getDouble(timeIndex));
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
                     }
 
                     int dateIndex = cursor.getColumnIndex("date");
@@ -811,7 +851,7 @@ public boolean login(String username, String password,String role) {
 
                     int timeIndex = cursor.getColumnIndex("volunteer_time");
                     if (timeIndex != -1) {
-                        record.setVolunteerTime(cursor.getDouble(timeIndex));
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
                     }
 
                     int dateIndex = cursor.getColumnIndex("date");
@@ -895,7 +935,7 @@ public boolean login(String username, String password,String role) {
 
                     int timeIndex = cursor.getColumnIndex("volunteer_time");
                     if (timeIndex != -1) {
-                        record.setVolunteerTime(cursor.getDouble(timeIndex));
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
                     }
 
                     int dateIndex = cursor.getColumnIndex("date");
@@ -940,7 +980,82 @@ public boolean login(String username, String password,String role) {
 
         return recordList;
     }
+    // 根据用户名查询记录
+    public List<Record> selectRecordByUserName(String username) {
 
+        SQLiteDatabase db = getReadableDatabase();
+        List<Record> recordList = new ArrayList<>();
+        String query = "SELECT a.* FROM  record"  + " a " +
+                "INNER JOIN account" +  " r " +
+                "ON a.user_id" + " = r.id" + " " +
+                "WHERE r.username"  + " = ?";
+        String[] selectionArgs = new String[]{username};
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        try {
+            // 遍历结果集
+            if (cursor.moveToFirst()) {
+                do {
+                    Record record = new Record();
+                    // 安全获取各列数据，先检查索引有效性
+                    int idIndex = cursor.getColumnIndex("id");
+                    if (idIndex != -1) {
+                        record.setId(cursor.getInt(idIndex));
+                    }
+
+                    int pictureIndex = cursor.getColumnIndex("picture");
+                    if (pictureIndex != -1) {
+                        record.setPicture(cursor.getString(pictureIndex));
+                    }
+
+                    int timeIndex = cursor.getColumnIndex("volunteer_time");
+                    if (timeIndex != -1) {
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
+                    }
+
+                    int dateIndex = cursor.getColumnIndex("date");
+                    if (dateIndex != -1) {
+                        record.setDate(new java.util.Date(cursor.getLong(dateIndex)));
+                    }
+
+                    int stateIndex = cursor.getColumnIndex("state");
+                    if (stateIndex != -1) {
+                        record.setState(cursor.getInt(stateIndex));
+                    }
+
+                    int userIdIndex = cursor.getColumnIndex("user_id");
+                    if (userIdIndex != -1) {
+                        record.setUserId(cursor.getInt(userIdIndex));
+                    }
+
+                    int activityIdIndex = cursor.getColumnIndex("activity_id");
+                    if (activityIdIndex != -1) {
+                        record.setActivityId(cursor.getInt(activityIdIndex));
+                    }
+
+                    int hostIdIndex = cursor.getColumnIndex("host_id");
+                    if (hostIdIndex != -1) {
+                        record.setHostId(cursor.getInt(hostIdIndex));
+                    }
+
+                    recordList.add(record);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return recordList;
+
+
+    }
 
 
 }

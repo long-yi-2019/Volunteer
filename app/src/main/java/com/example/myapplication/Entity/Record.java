@@ -5,17 +5,18 @@ import java.util.Date;
 public class Record {
     private Integer id;
     private String picture;
-    private Double volunteerTime;
+    private Integer volunteerTime;
     private Date date;
     private Integer state;
     private Integer userId;
     private Integer activityId;
     private Integer hostId;
+    private String activityName;
 
     public Record() {
     }
 
-    public Record(Integer id, String picture, Double volunteerTime, Date date, Integer state, Integer userId, Integer activityId, Integer hostId) {
+    public Record(Integer id, String picture, Integer volunteerTime, Date date, Integer state, Integer userId, Integer activityId, Integer hostId) {
         this.id = id;
         this.picture = picture;
         this.volunteerTime = volunteerTime;
@@ -42,11 +43,11 @@ public class Record {
         this.picture = picture;
     }
 
-    public Double getVolunteerTime() {
+    public Integer getVolunteerTime() {
         return volunteerTime;
     }
 
-    public void setVolunteerTime(Double volunteerTime) {
+    public void setVolunteerTime(Integer volunteerTime) {
         this.volunteerTime = volunteerTime;
     }
 
@@ -90,6 +91,14 @@ public class Record {
         this.hostId = hostId;
     }
 
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
     @Override
     public String toString() {
         return "Record{" +
@@ -101,6 +110,7 @@ public class Record {
                 ", userId=" + userId +
                 ", activityId=" + activityId +
                 ", hostId=" + hostId +
+                ", activityName='" + activityName + '\'' +
                 '}';
     }
 }

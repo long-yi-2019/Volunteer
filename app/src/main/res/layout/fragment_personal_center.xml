@@ -47,6 +47,14 @@
             </LinearLayout>
             <!-- 角色标题 -->
             <TextView
+                android:id="@+id/user_real_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姓名："
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+            <TextView
                 android:id="@+id/role_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,15 +69,9 @@
                 android:text="志愿时长：8h"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="用户简介：这个用户很懒，还没填写个人简介。"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_marginBottom="16dp"/>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,6 +146,7 @@
                 android:textStyle="bold" />
             <!--点击后复用activity_search页面-->
             <TextView
+                android:id="@+id/all_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="全部已报名活动"

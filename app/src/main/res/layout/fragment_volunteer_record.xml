@@ -26,10 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginBottom="20dp"
-        app:popupPrompt="请选择已参加的活动"
+        android:prompt="@string/prompt_select_activity"
         android:background="@drawable/spinner_background"
         android:paddingHorizontal="12dp"
-        android:spinnerMode="dropdown"/>
+        android:spinnerMode="dialog"/>
 
     <!-- 志愿时长时间 -->
     <EditText
