@@ -42,8 +42,8 @@
             android:id="@+id/action_personalCenterFragment_to_personalInfoFragment"
             app:destination="@id/personalInfoFragment"/>
         <action
-            android:id="@+id/action_personalCenterFragment_to_activitySearchFragment"
-            app:destination="@id/activitySearchFragment"/>
+            android:id="@+id/action_personalCenterFragment_to_activityAllActivityFragment"
+            app:destination="@id/allActivity"/>
         <action
             android:id="@+id/action_personalCenterFragment_to_activityPublishFragment"
             app:destination="@id/activityPublishFragment"/>
@@ -73,4 +73,7 @@
     <fragment
         android:id="@+id/volunteerRecordFragment"
         android:name="com.example.myapplication.VolunteerRecordFragment"/>
+    <fragment
+        android:id="@+id/allActivity"
+        android:name="com.example.myapplication.AllActivityFragment"/>
 </navigation>

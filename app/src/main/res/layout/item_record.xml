@@ -24,7 +24,7 @@
 
             <!-- 活动名称 -->
             <TextView
-                android:id="@+id/activity_name_text"
+                android:id="@+id/record_activityName_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="活动名称"
