@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Entity.Account;
 import com.example.myapplication.Entity.Activity;
 import com.example.myapplication.Entity.Record;
+import com.example.myapplication.Entity.ShowRecord;
 
 import org.w3c.dom.Text;
 
@@ -173,7 +174,7 @@ public class PersonalCenterFragment extends Fragment {
     }
     private void setupRecordRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        List<Record> records = dbHelper.selectRecordByUserName(username);
+        List<ShowRecord> records = dbHelper.selectRecordByUserName(username);
         if (records != null && !records.isEmpty()) {
             placeholderText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);

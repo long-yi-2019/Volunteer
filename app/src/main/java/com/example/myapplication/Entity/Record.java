@@ -12,11 +12,12 @@ public class Record {
     private Integer activityId;
     private Integer hostId;
     private String activityName;
+    private String content;
 
     public Record() {
     }
 
-    public Record(Integer id, String picture, Integer volunteerTime, Date date, Integer state, Integer userId, Integer activityId, Integer hostId) {
+    public Record(Integer id, String picture, Integer volunteerTime, Date date, Integer state, Integer userId, Integer activityId, Integer hostId,String content) {
         this.id = id;
         this.picture = picture;
         this.volunteerTime = volunteerTime;
@@ -25,6 +26,7 @@ public class Record {
         this.userId = userId;
         this.activityId = activityId;
         this.hostId = hostId;
+        this.content=content;
     }
 
     public Integer getId() {
@@ -112,5 +114,13 @@ public class Record {
                 ", hostId=" + hostId +
                 ", activityName='" + activityName + '\'' +
                 '}';
+    }
+    public String getContent()
+    {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content=content;
+
     }
 }

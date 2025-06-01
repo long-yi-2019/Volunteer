@@ -11,6 +11,7 @@ import com.example.myapplication.Entity.Account;
 import com.example.myapplication.Entity.Activity;
 import com.example.myapplication.Entity.Record;
 import com.example.myapplication.Entity.DateTimeUtils;
+import com.example.myapplication.Entity.ShowRecord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -432,6 +433,71 @@ public boolean login(String username, String password,String role) {
         return activities;
     }
 
+
+
+    /**
+     * 根据主办方ID查询活动列表
+     * @param hostId 主办方ID
+     * @return 匹配的活动列表
+     */
+    public List<Activity> getActivityListByHostId(String hostId) {
+        List<Activity> activities = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        // 查询activity表中host_id匹配的记录，并按开始时间降序排列
+        String query = "SELECT * FROM activity WHERE host_id = ? ORDER BY begin_time DESC";
+        String[] selectionArgs = new String[]{hostId};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // 获取列索引
+        int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
+        int pictureIndex = cursor.getColumnIndex("picture");
+        int areaIndex = cursor.getColumnIndex("area");
+        int contentIndex = cursor.getColumnIndex("content");
+        int countIndex = cursor.getColumnIndex("count");
+        int actualCountIndex = cursor.getColumnIndex("actual_count");
+        int beginTimeIndex = cursor.getColumnIndex("begin_time");
+        int endTimeIndex = cursor.getColumnIndex("end_time");
+        int volunteerTimeIndex = cursor.getColumnIndex("volunteer_time");
+        int stateIndex = cursor.getColumnIndex("state");
+        int hostIdIndex = cursor.getColumnIndex("host_id"); // 修正列名，与表定义一致
+
+        try {
+            while (cursor.moveToNext()) {
+                Activity activity = new Activity();
+                if (idIndex != -1) activity.setId(cursor.getInt(idIndex));
+                if (nameIndex != -1) activity.setName(cursor.getString(nameIndex));
+                if (pictureIndex != -1) activity.setPicture(cursor.getString(pictureIndex));
+                if (areaIndex != -1) activity.setArea(cursor.getString(areaIndex));
+                if (contentIndex != -1) activity.setContent(cursor.getString(contentIndex));
+                if (countIndex != -1) activity.setCount(cursor.getInt(countIndex));
+                if (actualCountIndex != -1) activity.setActualCount(cursor.getInt(actualCountIndex));
+                if (beginTimeIndex != -1) activity.setBeginTime(cursor.getString(beginTimeIndex));
+                if (endTimeIndex != -1) activity.setEndTime(cursor.getString(endTimeIndex));
+                if (volunteerTimeIndex != -1) activity.setVolunteerTime(cursor.getInt(volunteerTimeIndex));
+                if (stateIndex != -1) activity.setState(cursor.getString(stateIndex));
+                if (hostIdIndex != -1) activity.setHostId(cursor.getString(hostIdIndex));
+
+                activities.add(activity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return activities;
+    }
+
+
     /**
      * 更新活动状态
      */
@@ -633,6 +699,9 @@ public boolean login(String username, String password,String role) {
     }
 
 
+
+
+
 //模糊查询
     @SuppressLint("Range")
     public List<Activity> searchActivitiesByName(String keyword) {
@@ -670,7 +739,7 @@ public boolean login(String username, String password,String role) {
         return activities;
     }
 
-//某用户预约的活动
+    //某用户预约的活动
     @SuppressLint("Range")
     public Activity selectActivityByName(String name){
         SQLiteDatabase db = getReadableDatabase();
@@ -699,6 +768,9 @@ public boolean login(String username, String password,String role) {
         }
         return activity;
     }
+
+
+
 
     //没审核的活动
     @SuppressLint("Range")
@@ -730,6 +802,7 @@ public boolean login(String username, String password,String role) {
         return activity;
     }
 
+    //统计活动现有报名的人数
 
     public int getActivityNumberByUserName(String name){
         SQLiteDatabase db = getReadableDatabase();
@@ -742,10 +815,58 @@ public boolean login(String username, String password,String role) {
         return cursorInt;
     }
 
+
+    /**
+     * 根据主办方ID获取该主办方发布的活动的所有记录
+     */
+    @SuppressLint("Range")
+    public List<ShowRecord> getRecordsByHostId(String hostId) {
+        List<ShowRecord> records = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        // 三表联查：record表 + activity表 + account表
+        String query = "SELECT r.*, a.name as activity_name, u.username as volunteer_name " +
+                "FROM record r " +
+                "INNER JOIN activity a ON r.activity_id = a.id " +
+                "INNER JOIN account u ON r.user_id = u.id " +
+                "WHERE a.host_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{hostId});
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ShowRecord record = new ShowRecord();
+                    record.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                    record.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                    record.setVolunteerTime(cursor.getInt(cursor.getColumnIndex("volunteer_time")));
+                    record.setDate(new java.util.Date((cursor.getColumnIndex("date"))));
+                    record.setState(cursor.getInt(cursor.getColumnIndex("state")));
+                    record.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                    record.setActivityId(cursor.getInt(cursor.getColumnIndex("activity_id")));
+                    record.setHostId(cursor.getInt(cursor.getColumnIndex("host_id")));
+                    record.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                    // 获取关联的活动名称和志愿者用户名
+                    record.setActivityName(cursor.getString(cursor.getColumnIndex("activity_name")));
+                    record.setUsername(cursor.getString(cursor.getColumnIndex("volunteer_name")));
+                    records.add(record);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            cursor.close();
+            db.close();
+        }
+
+        return records;
+    }
+
+
+
+
     //返回没审核的record
     // 查询未审核的记录(state=0)
-    public List<Record> selectRecordByState0() {
-        List<Record> recordList = new ArrayList<>();
+    public List<ShowRecord> selectRecordByState0() {
+        List<ShowRecord> recordList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
 
@@ -767,7 +888,7 @@ public boolean login(String username, String password,String role) {
             // 遍历结果集
             if (cursor.moveToFirst()) {
                 do {
-                    Record record = new Record();
+                    ShowRecord record = new ShowRecord();
 
                     // 安全获取各列数据，先检查索引有效性
                     int idIndex = cursor.getColumnIndex("id");
@@ -826,9 +947,62 @@ public boolean login(String username, String password,String role) {
         }
         return recordList;
 }
+
+    //返回活动管理者没审核的record
+    // 查询未审核的记录(state=0)
+    public List<ShowRecord> selectUnreviewedRecordsByHostId(String hostId) {
+        List<ShowRecord> recordList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            // 查询条件：state=0（未审核）且 host_id=?
+            String selection = "state = ? AND host_id = ?";
+            String[] selectionArgs = {"0", hostId}; // state=0 为未审核
+
+            cursor = db.query(
+                    "record",
+                    null, // 查询所有列
+                    selection,
+                    selectionArgs,
+                    null, // 不分组
+                    null, // 无 HAVING 条件
+                    null // 按默认顺序排列（可添加排序条件如 "date DESC"）
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    ShowRecord record = new ShowRecord();
+
+                    // 提取各字段值（确保与数据库表字段名一致）
+                    record.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    record.setPicture(cursor.getString(cursor.getColumnIndexOrThrow("picture")));
+                    record.setVolunteerTime(cursor.getInt(cursor.getColumnIndexOrThrow("volunteer_time")));
+                    record.setDate(new java.util.Date(cursor.getLong(cursor.getColumnIndexOrThrow("date"))));
+                    record.setState(cursor.getInt(cursor.getColumnIndexOrThrow("state")));
+                    record.setUserId(cursor.getInt(cursor.getColumnIndexOrThrow("user_id")));
+                    record.setActivityId(cursor.getInt(cursor.getColumnIndexOrThrow("activity_id")));
+                    record.setHostId(cursor.getInt(cursor.getColumnIndexOrThrow("host_id")));
+
+                    // 若需关联用户名（从 account 表查询），需添加联查逻辑
+                    // 示例联查：INNER JOIN account ON record.user_id = account.id
+                    // 此处仅获取 record 表字段，如需 username 需修改 SQL 并调用 setUsername()
+
+                    recordList.add(record);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return recordList;
+    }
     // 查询审核未通过的记录(state=1)
-    public List<Record> selectRecordByState1() {
-        List<Record> recordList = new ArrayList<>();
+    public List<ShowRecord> selectRecordByState1() {
+        List<ShowRecord> recordList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
 
@@ -850,7 +1024,7 @@ public boolean login(String username, String password,String role) {
             // 遍历结果集
             if (cursor.moveToFirst()) {
                 do {
-                    Record record = new Record();
+                    ShowRecord record = new ShowRecord();
 
                     // 安全获取各列数据，先检查索引有效性
                     int idIndex = cursor.getColumnIndex("id");
@@ -911,8 +1085,8 @@ public boolean login(String username, String password,String role) {
         return recordList;
     }
     // 查询审核通过的记录(state=2)
-    public List<Record> selectRecordByState2() {
-        List<Record> recordList = new ArrayList<>();
+    public List<ShowRecord> selectRecordByState2() {
+        List<ShowRecord> recordList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
 
@@ -934,7 +1108,7 @@ public boolean login(String username, String password,String role) {
             // 遍历结果集
             if (cursor.moveToFirst()) {
                 do {
-                    Record record = new Record();
+                    ShowRecord record = new ShowRecord();
 
                     // 安全获取各列数据，先检查索引有效性
                     int idIndex = cursor.getColumnIndex("id");
@@ -994,11 +1168,12 @@ public boolean login(String username, String password,String role) {
 
         return recordList;
     }
+
     // 根据用户名查询记录
-    public List<Record> selectRecordByUserName(String username) {
+    public List<ShowRecord> selectRecordByUserName(String username) {
 
         SQLiteDatabase db = getReadableDatabase();
-        List<Record> recordList = new ArrayList<>();
+        List<ShowRecord> recordList = new ArrayList<>();
         String query = "SELECT a.* FROM  record"  + " a " +
                 "INNER JOIN account" +  " r " +
                 "ON a.user_id" + " = r.id" + " " +
@@ -1009,7 +1184,7 @@ public boolean login(String username, String password,String role) {
             // 遍历结果集
             if (cursor.moveToFirst()) {
                 do {
-                    Record record = new Record();
+                    ShowRecord record = new ShowRecord();
                     // 安全获取各列数据，先检查索引有效性
                     int idIndex = cursor.getColumnIndex("id");
                     if (idIndex != -1) {
@@ -1069,6 +1244,257 @@ public boolean login(String username, String password,String role) {
         return recordList;
 
 
+    }
+
+    /**
+     * 根据活动名称模糊查询记录
+     * @param activityName 活动名称关键词
+     * @return 匹配的记录列表
+     */
+    public List<ShowRecord> selectRecordByActivityName(String activityName) {
+        SQLiteDatabase db = getReadableDatabase();
+        List<ShowRecord> recordList = new ArrayList<>();
+
+        // 使用三表联查：record表、activity表和account表
+        String query = "SELECT r.*, a.name as activity_name " +
+                "FROM record r " +
+                "INNER JOIN activity a ON r.activity_id = a.id " +
+                "WHERE a.name LIKE ?";
+
+        // 构建模糊查询参数（前后加%）
+        String[] selectionArgs = new String[]{"%" + activityName + "%"};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ShowRecord record = new ShowRecord();
+                    // 安全获取各列数据，先检查索引有效性
+                    int idIndex = cursor.getColumnIndex("id");
+                    if (idIndex != -1) {
+                        record.setId(cursor.getInt(idIndex));
+                    }
+
+                    int pictureIndex = cursor.getColumnIndex("picture");
+                    if (pictureIndex != -1) {
+                        record.setPicture(cursor.getString(pictureIndex));
+                    }
+
+                    int timeIndex = cursor.getColumnIndex("volunteer_time");
+                    if (timeIndex != -1) {
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
+                    }
+
+                    int dateIndex = cursor.getColumnIndex("date");
+                    if (dateIndex != -1) {
+                        record.setDate(new java.util.Date(cursor.getLong(dateIndex)));
+                    }
+
+                    int stateIndex = cursor.getColumnIndex("state");
+                    if (stateIndex != -1) {
+                        record.setState(cursor.getInt(stateIndex));
+                    }
+
+                    int userIdIndex = cursor.getColumnIndex("user_id");
+                    if (userIdIndex != -1) {
+                        record.setUserId(cursor.getInt(userIdIndex));
+                    }
+
+                    int activityIdIndex = cursor.getColumnIndex("activity_id");
+                    if (activityIdIndex != -1) {
+                        record.setActivityId(cursor.getInt(activityIdIndex));
+                    }
+
+                    int hostIdIndex = cursor.getColumnIndex("host_id");
+                    if (hostIdIndex != -1) {
+                        record.setHostId(cursor.getInt(hostIdIndex));
+                    }
+
+                    recordList.add(record);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return recordList;
+    }
+
+    /**
+     * 根据用户名精确查询和活动名称模糊查询记录
+     * @param username 用户名（精确匹配）
+     * @param activityName 活动名称关键词（模糊匹配）
+     * @return 匹配的记录列表
+     */
+    public List<ShowRecord> selectRecordByUsernameAndActivityName(String username, String activityName) {
+        SQLiteDatabase db = getReadableDatabase();
+        List<ShowRecord> recordList = new ArrayList<>();
+
+        // 使用三表联查：record表、activity表和account表
+        String query = "SELECT r.*, a.name as activity_name, u.username as user_username " +
+                "FROM record r " +
+                "INNER JOIN activity a ON r.activity_id = a.id " +
+                "INNER JOIN account u ON r.user_id = u.id " +
+                "WHERE u.username = ? AND a.name LIKE ?";
+
+        // 构建查询参数（活动名称前后加%）
+        String[] selectionArgs = new String[]{
+                username,
+                "%" + activityName + "%"
+        };
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ShowRecord record = new ShowRecord();
+                    // 安全获取各列数据，先检查索引有效性
+                    int idIndex = cursor.getColumnIndex("id");
+                    if (idIndex != -1) {
+                        record.setId(cursor.getInt(idIndex));
+                    }
+
+                    int pictureIndex = cursor.getColumnIndex("picture");
+                    if (pictureIndex != -1) {
+                        record.setPicture(cursor.getString(pictureIndex));
+                    }
+
+                    int timeIndex = cursor.getColumnIndex("volunteer_time");
+                    if (timeIndex != -1) {
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
+                    }
+
+                    int dateIndex = cursor.getColumnIndex("date");
+                    if (dateIndex != -1) {
+                        record.setDate(new java.util.Date(cursor.getLong(dateIndex)));
+                    }
+
+                    int stateIndex = cursor.getColumnIndex("state");
+                    if (stateIndex != -1) {
+                        record.setState(cursor.getInt(stateIndex));
+                    }
+
+                    int userIdIndex = cursor.getColumnIndex("user_id");
+                    if (userIdIndex != -1) {
+                        record.setUserId(cursor.getInt(userIdIndex));
+                    }
+
+                    int activityIdIndex = cursor.getColumnIndex("activity_id");
+                    if (activityIdIndex != -1) {
+                        record.setActivityId(cursor.getInt(activityIdIndex));
+                    }
+
+                    int hostIdIndex = cursor.getColumnIndex("host_id");
+                    if (hostIdIndex != -1) {
+                        record.setHostId(cursor.getInt(hostIdIndex));
+                    }
+
+                    recordList.add(record);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return recordList;
+    }
+
+
+
+    /**
+     * 根据主办方ID查询记录
+     * @param hostId 主办方ID
+     * @return 匹配的记录列表
+     */
+    public List<ShowRecord> selectRecordByHostId(String hostId) {
+        SQLiteDatabase db = getReadableDatabase();
+        List<ShowRecord> recordList = new ArrayList<>();
+
+        // 查询record表中host_id匹配的记录
+        String query = "SELECT * FROM record WHERE host_id = ?";
+        String[] selectionArgs = new String[]{hostId};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ShowRecord record = new ShowRecord();
+                    // 安全获取各列数据，先检查索引有效性
+                    int idIndex = cursor.getColumnIndex("id");
+                    if (idIndex != -1) {
+                        record.setId(cursor.getInt(idIndex));
+                    }
+
+                    int pictureIndex = cursor.getColumnIndex("picture");
+                    if (pictureIndex != -1) {
+                        record.setPicture(cursor.getString(pictureIndex));
+                    }
+
+                    int timeIndex = cursor.getColumnIndex("volunteer_time");
+                    if (timeIndex != -1) {
+                        record.setVolunteerTime(cursor.getInt(timeIndex));
+                    }
+
+                    int dateIndex = cursor.getColumnIndex("date");
+                    if (dateIndex != -1) {
+                        record.setDate(new java.util.Date(cursor.getLong(dateIndex)));
+                    }
+
+                    int stateIndex = cursor.getColumnIndex("state");
+                    if (stateIndex != -1) {
+                        record.setState(cursor.getInt(stateIndex));
+                    }
+
+                    int userIdIndex = cursor.getColumnIndex("user_id");
+                    if (userIdIndex != -1) {
+                        record.setUserId(cursor.getInt(userIdIndex));
+                    }
+
+                    int activityIdIndex = cursor.getColumnIndex("activity_id");
+                    if (activityIdIndex != -1) {
+                        record.setActivityId(cursor.getInt(activityIdIndex));
+                    }
+
+                    int hostIdIndex = cursor.getColumnIndex("host_id");
+                    if (hostIdIndex != -1) {
+                        record.setHostId(cursor.getInt(hostIdIndex));
+                    }
+
+                    recordList.add(record);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return recordList;
     }
 
 

@@ -12,15 +12,17 @@ import com.example.myapplication.Entity.Activity;
 
 import java.util.List;
 import com.example.myapplication.Entity.Record;
+import com.example.myapplication.Entity.ShowRecord;
+
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
-    private List<Record> records;
+    private List<ShowRecord> records;
     private RecordAdapter.OnRecordClickListener listener;
 
     public interface OnRecordClickListener {
-        void onRecordClick(Record record);
+        void onRecordClick(ShowRecord record);
     }
 
-    public RecordAdapter(List<Record> records, RecordAdapter.OnRecordClickListener listener) {
+    public RecordAdapter(List<ShowRecord> records, RecordAdapter.OnRecordClickListener listener) {
         this.records = records;
         this.listener = listener;
     }
@@ -34,7 +36,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
-        Record record = records.get(position);
+        ShowRecord record = records.get(position);
         holder.activityNameTextView.setText(record.getActivityName());
         holder.timeTextView.setText(record.getDate().toString());
         holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()));
