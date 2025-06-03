@@ -58,7 +58,7 @@ public class ActivitySearchFragment extends Fragment {
 
             // TODO: 实现搜索过滤逻辑
         });
-
+        dbHelper.close();
         return view;
     }
 

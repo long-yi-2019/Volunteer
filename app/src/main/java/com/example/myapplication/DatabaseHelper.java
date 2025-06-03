@@ -380,13 +380,13 @@ public boolean login(String username, String password,String role) {
     public Cursor getAllActivitiesOrderByTime() {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(
-                "activity",          // 表名
-                null,               // 返回所有列
-                null,               // WHERE条件（无）
-                null,               // WHERE参数
-                null,               // GROUP BY
-                null,               // HAVING
-                "begin_time DESC"   // ORDER BY 按开始时间降序
+                "activity",               // 表名
+                null,                     // 返回所有列
+                "state = ?",              // WHERE 条件：state 等于 2
+                new String[] { "2" },     // 参数替换值
+                null,                     // GROUP BY（无）
+                null,                     // HAVING（无）
+                "begin_time DESC"         // ORDER BY 按开始时间降序
         );
     }
 
@@ -697,6 +697,20 @@ public boolean login(String username, String password,String role) {
 
         return activities;
     }
+// 在更新个人信息之后更改绑定的活动的信息。
+    public void UpdateActivitiesByName(String oldName, String newName){
+        SQLiteDatabase db = getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", newName);
+
+        int rowsAffected = db.update(
+                "registration",          // 表名
+                values,              // 要更新的值
+                "username = ?",          // WHERE条件
+                new String[]{oldName} // WHERE参数
+        );
+        db.close();
+    }
 
 
 
@@ -802,6 +816,39 @@ public boolean login(String username, String password,String role) {
         return activity;
     }
 
+    @SuppressLint("Range")
+    public List<Activity> selectActivitiesByState() {
+        SQLiteDatabase db = getReadableDatabase();
+        List<Activity> activities = new ArrayList<>();
+        String query = "SELECT * FROM activity WHERE state = 0";
+        Cursor cursor = db.rawQuery(query, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Activity activity = new Activity();
+                    activity.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                    activity.setName(cursor.getString(cursor.getColumnIndex("name")));
+                    activity.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                    activity.setArea(cursor.getString(cursor.getColumnIndex("area")));
+                    activity.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                    activity.setCount(cursor.getInt(cursor.getColumnIndex("count")));
+                    activity.setActualCount(cursor.getInt(cursor.getColumnIndex("actual_count")));
+                    activity.setBeginTime(cursor.getString(cursor.getColumnIndex("begin_time")));
+                    activity.setEndTime(cursor.getString(cursor.getColumnIndex("end_time")));
+                    activity.setVolunteerTime(cursor.getInt(cursor.getColumnIndex("volunteer_time")));
+                    activity.setState(cursor.getString(cursor.getColumnIndex("state")));
+                    activity.setHostId(cursor.getString(cursor.getColumnIndex("hostid")));
+                    activities.add(activity);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            cursor.close();
+            // 不建议在这里 close(db)，交给上层统一管理
+        }
+
+        return activities;
+    }
+
     //统计活动现有报名的人数
 
     public int getActivityNumberByUserName(String name){
@@ -814,8 +861,34 @@ public boolean login(String username, String password,String role) {
         cursor.close();
         return cursorInt;
     }
+// 统计等待审核的数量
+public int getActivityNumberWaitForVerify() {
+    // 初始化数据库
+    SQLiteDatabase db = getReadableDatabase();
 
+    // 定义 SQL 查询
 
+    try (db) {
+        if (db == null) {
+            return 0; // 数据库未正确初始化
+        }
+        String query = "SELECT COUNT(*) FROM activity WHERE state = 0";
+        String[] selectionArgs = {}; // 无参数
+        // 执行查询
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        if (cursor.moveToFirst()) {
+            // 获取统计结果
+            int count = cursor.getInt(0);
+            cursor.close(); // 关闭游标
+            return count;
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); // 捕获并打印异常
+    }
+    // 确保数据库连接关闭
+
+    return 0; // 默认返回 0
+}
     /**
      * 根据主办方ID获取该主办方发布的活动的所有记录
      */

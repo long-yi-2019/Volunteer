@@ -1,16 +1,13 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,18 +19,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Entity.Account;
 import com.example.myapplication.Entity.Activity;
-import com.example.myapplication.Entity.Record;
 import com.example.myapplication.Entity.ShowRecord;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class PersonalCenterFragment extends Fragment {
-
-
     private String Username;
     private ActivityAdapter adapter;
+
+    private DatabaseHelper databaseHelper;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        databaseHelper = new DatabaseHelper(requireContext()); // 初始化
+    }
+
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -59,6 +60,7 @@ public class PersonalCenterFragment extends Fragment {
         Button recordButton = view.findViewById(R.id.record_button);
         TextView readyText = view.findViewById(R.id.ready_text);
         // 初始化ViewModel
+
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
         // 名字
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
@@ -70,33 +72,26 @@ public class PersonalCenterFragment extends Fragment {
 
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
             Username = name;
-            Log.d("PersonalCenter", "当前用户名: " + Username); // 使用Log代替System.out
-
-            // 在这里执行依赖用户名的操作
+            // 在这里执行点击切换下方显示内容的操作
             if (Username != null) {
-                readyNumberLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // 点击 "待参加" 区域执行的操作
-//                        Toast.makeText(getActivity(), "待参加区域被点击", Toast.LENGTH_SHORT).show();
-                        recordsRecyclerView.setVisibility(View.GONE);
-                        recordTextView.setVisibility(View.GONE);
-                        setupActivityRecyclerView(Username,  recyclerView, placeholderText, view);
+                readyNumberLayout.setOnClickListener(v -> {
+                    // 点击 "待参加" 区域执行的操作
+                    recordsRecyclerView.setVisibility(View.GONE);
+                    recordTextView.setVisibility(View.GONE);
+                    Account account = databaseHelper.selectAccount(Username);
+                    if (account.getRole().equals("Admin")){
+                        setupActivityRecyclerViewForAdmin(recyclerView,placeholderText,view);
+                    }else{
+                        setupActivityRecyclerView(Username, recyclerView, placeholderText, view);
                     }
                 });
-
-                verifyNumber.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // 点击 "待审核" 区域执行的操作
+                verifyNumber.setOnClickListener(v -> {
+                    // 点击 "待审核" 区域执行的操作
 //                        Toast.makeText(getActivity(), "待审核区域被点击", Toast.LENGTH_SHORT).show();
-                        recyclerView.setVisibility(View.GONE);
-                        placeholderText.setVisibility(View.GONE);
-                        setupRecordRecyclerView(Username, recordsRecyclerView, recordTextView, view);
-                    }
+                    recyclerView.setVisibility(View.GONE);
+                    placeholderText.setVisibility(View.GONE);
+                    setupRecordRecyclerView(Username, recordsRecyclerView, recordTextView, view);
                 });
-
-
             }
         });
 
@@ -124,12 +119,11 @@ public class PersonalCenterFragment extends Fragment {
             publishButton.setVisibility(role.equals("Organizer") || role.equals("Admin") ? View.VISIBLE : View.GONE);
             verifyNumber.setVisibility(role.equals("Admin") ? View.VISIBLE : View.GONE);
         });
-
+//  设置红点的数字
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
-            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
             userName.setText(name);
-            System.out.println(dbHelper.selectAccount(name).toString());
-            String real_name = dbHelper.selectAccount(name).getName();
+            System.out.println(databaseHelper.selectAccount(name).toString());
+            String real_name = databaseHelper.selectAccount(name).getName();
             System.out.println(real_name);
             if(real_name != null && !real_name.isEmpty() && !real_name.equals(" ")){
                 realName.setText("姓名："+ real_name);
@@ -137,8 +131,13 @@ public class PersonalCenterFragment extends Fragment {
                 realName.setText("姓名：暂无，请登记" );
             }
 
-            System.out.println(dbHelper.getActivityNumberByUserName(name));
-            readyPointNumber.setText(String.valueOf(dbHelper.getActivityNumberByUserName(name)));
+            System.out.println(databaseHelper.getActivityNumberByUserName(name));
+            Account account = databaseHelper.selectAccount(name);
+            if (account.getRole().equals("Admin")){
+                readyPointNumber.setText(String.valueOf(databaseHelper.getActivityNumberWaitForVerify()));
+            }else {
+                readyPointNumber.setText(String.valueOf(databaseHelper.getActivityNumberByUserName(name)));
+            }
             readyVerifyNumber.setText(String.valueOf(0));
         });
 
@@ -151,9 +150,40 @@ public class PersonalCenterFragment extends Fragment {
         recordButton.setOnClickListener(v->Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_recordListFragment));
         return view;
     }
+
+
+    private void setupActivityRecyclerViewForAdmin(RecyclerView recyclerView, TextView placeholderText,View view){
+
+        List<Activity> activities = databaseHelper.selectActivitiesByState();
+        if (activities != null && !activities.isEmpty()) {
+            placeholderText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            ActivityAdapter adapter = new ActivityAdapter(activities, activity -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("activity_name", activity.getName());
+                bundle.putString("activity_location", activity.getArea());
+                bundle.putString("activity_time", activity.getBeginTime());
+                bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
+                bundle.putInt("activity_id", activity.getId());
+                Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
+            });
+            recyclerView.setAdapter(adapter);
+        } else {
+            placeholderText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+    @Override
+    public void onDestroy() {
+        if (databaseHelper != null) {
+            databaseHelper.close(); // 确保关闭
+        }
+        super.onDestroy();
+    }
+
+//    这一段代码用来生成志愿者个人中心界面的活动列表
     private void setupActivityRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        List<Activity> activities = dbHelper.getActivitiesByUsername(username);
+        List<Activity> activities = databaseHelper.getActivitiesByUsername(username);
         if (activities != null && !activities.isEmpty()) {
             placeholderText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
@@ -173,8 +203,7 @@ public class PersonalCenterFragment extends Fragment {
         }
     }
     private void setupRecordRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-        List<ShowRecord> records = dbHelper.selectRecordByUserName(username);
+        List<ShowRecord> records = databaseHelper.selectRecordByUserName(username);
         if (records != null && !records.isEmpty()) {
             placeholderText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);

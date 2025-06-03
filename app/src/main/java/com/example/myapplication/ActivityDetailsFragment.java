@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,7 @@ import com.example.myapplication.Entity.Activity;
 public class ActivityDetailsFragment extends Fragment {
     String currentUser;
     int activityId;
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class ActivityDetailsFragment extends Fragment {
         TextView descriptionTextView = view.findViewById(R.id.activity_description_text);
         Button bookButton = view.findViewById(R.id.book_button);
         TextView errorText = view.findViewById(R.id.error_text);
+        TextView userText = view.findViewById(R.id.activity_user_text);
         Button approveButton = view.findViewById(R.id.approve_button);
         Button rejectButton = view.findViewById(R.id.reject_button);
         LinearLayout buttonContainer = view.findViewById(R.id.button_container);
@@ -52,6 +56,7 @@ public class ActivityDetailsFragment extends Fragment {
             locationTextView.setText(activityName.getArea());
             timeTextView.setText(activityName.getBeginTime());
             durationTextView.setText(activityName.getEndTime());
+            userText.setText(activityName.getCount()+"/"+activityName.getActualCount());
             dbHelper.close();
         }
 
@@ -72,9 +77,10 @@ public class ActivityDetailsFragment extends Fragment {
             int result = db.registerActivityWithChecks(currentUser, activityId);
             switch (result) {
                 case 1:
-                    Toast.makeText(requireContext(), "预约成功" , Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "预约成功" , Toast.LENGTH_SHORT).show();
+                    bookButton.setVisibility(View.GONE);
                     NavController navController = Navigation.findNavController(view);
-                    navController.navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment); break;
+                    break;
                 case 0:  errorText.setText("您已预约过该活动");return;
                 case -1:  errorText.setText("活动名额已满"); return;
                 case -2:  errorText.setText("活动已结束"); return;
@@ -87,8 +93,21 @@ public class ActivityDetailsFragment extends Fragment {
 
         //如果是志愿者，预约活动后，则隐藏bookButton
         //如果是管理员，隐藏bookButton，显示buttonContainer，编写approveButton和rejectButton的点击事件
-        viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
-
+        viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
+            currentUser = role;
+            Log.d("DEBUG","获取用户："+currentUser);
+            DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+            if (role.equals("Admin")){
+                bookButton.setVisibility(View.GONE);
+                buttonContainer.setVisibility(View.VISIBLE);
+                approveButton.setOnClickListener(v -> {
+                    databaseHelper.updateActivityState(activityId,"2");
+                });
+                rejectButton.setOnClickListener(v -> {
+                    databaseHelper.updateActivityState(activityId, "1");
+                });
+            }
+            databaseHelper.close();
         });
         return view;
     }

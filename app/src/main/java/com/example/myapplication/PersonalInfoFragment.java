@@ -82,6 +82,7 @@ public class PersonalInfoFragment extends Fragment {
                        viewModel.setUsername(newUsername);
 
 
+
                    }
                    else {
                        errorText.setText("用户名已存在");
@@ -124,11 +125,13 @@ public class PersonalInfoFragment extends Fragment {
     private boolean updateUsernameAndName(String newUsername, String newName) {
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
         boolean success = dbHelper.updateUsernameAndName(oldUsername, newUsername, newName);
-        dbHelper.close();
+
         if (success) {
             // 更新成功，保存新用户名并返回
-
+            Log.d("DEBUG","修改注册活动的名字");
+            dbHelper.UpdateActivitiesByName(oldUsername, newUsername);
             // 导航到登录界面
+            dbHelper.close();
             return true;
                  }
         else {

@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="志愿时长（小时）"
-        android:inputType="datetime"
+        android:inputType="number"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:background="@drawable/edittext_border"

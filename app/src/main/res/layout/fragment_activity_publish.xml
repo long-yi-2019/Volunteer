@@ -40,20 +40,35 @@
             android:autofillHints=""
             android:background="@drawable/edittext_border"
             android:clickable="true"
-            android:focusable="false"
+            android:focusable="true"
             android:focusableInTouchMode="false"
             android:hint="活动时间"
             android:inputType="none"
             android:paddingLeft="12dp"
             android:paddingRight="12dp" />
 
-        <!-- 活动时间 -->
+        <EditText
+            android:id="@+id/activity_time_end_text"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginBottom="16dp"
+            android:autofillHints=""
+            android:background="@drawable/edittext_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:hint="结束时间"
+            android:inputType="none"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp" />
+
+        <!-- 活动地点 -->
         <EditText
             android:id="@+id/activity_position_edit_text"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:hint="活动地点"
-            android:inputType="datetime"
+            android:inputType="text"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:background="@drawable/edittext_border"
@@ -68,6 +83,8 @@
             android:inputType="number"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:background="@drawable/edittext_border"
             android:layout_marginBottom="16dp"/>
 
@@ -76,7 +93,7 @@
             android:id="@+id/activity_duration_edit_text"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="活动时长（小时）"
+            android:hint="志愿时长（小时）"
             android:inputType="numberDecimal"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"

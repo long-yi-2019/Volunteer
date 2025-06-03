@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
@@ -45,6 +46,8 @@ public class ActivityPublishFragment extends Fragment {
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     String url = null;
+
+    String state = "0";
 
     private void setupImagePicker() {
         imagePickerLauncher = registerForActivityResult(
@@ -107,6 +110,7 @@ public class ActivityPublishFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -115,19 +119,24 @@ public class ActivityPublishFragment extends Fragment {
         // 绑定视图
         EditText nameEditText = view.findViewById(R.id.activity_name_edit_text);
         EditText timeEditText = view.findViewById(R.id.activity_time_edit_text);
+        EditText endTimeText = view.findViewById(R.id.activity_time_end_text);
+        EditText positionText = view.findViewById(R.id.activity_position_edit_text);
         EditText peopleEditText = view.findViewById(R.id.activity_people_edit_text);
         EditText durationEditText = view.findViewById(R.id.activity_duration_edit_text);
         EditText descriptionEditText = view.findViewById(R.id.activity_description_edit_text);
         Button publishButton = view.findViewById(R.id.publish_button);
-        ImageView uploadImageView = view.findViewById(R.id.upload_image_view);
         FrameLayout uploadContainer = view.findViewById(R.id.upload_image_container);
+        ImageView uploadImageView = view.findViewById(R.id.upload_image_view);
         setupImagePicker();
         timeEditText.setOnClickListener(v -> showDateTimePicker(timeEditText));
+        endTimeText.setOnClickListener(v -> showDateTimePicker(endTimeText));
         uploadContainer.setOnClickListener(v -> openImageChooser());
         // 发布按钮
         publishButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString();
             String time = timeEditText.getText().toString();
+            String endTime = endTimeText.getText().toString();
+            String area = positionText.getText().toString();
             String people = peopleEditText.getText().toString();
             String duration = durationEditText.getText().toString();
             String description = descriptionEditText.getText().toString();
@@ -154,12 +163,14 @@ public class ActivityPublishFragment extends Fragment {
                 // 4. 创建Activity对象
                 Activity newActivity = new Activity();
                 newActivity.setName(name);
-//                newActivity.setArea(area);
                 newActivity.setBeginTime(time);
+                newActivity.setEndTime(endTime);
+                newActivity.setArea(area);
                 newActivity.setCount(count);
                 newActivity.setContent(description);
                 newActivity.setVolunteerTime(volunteertime);
                 newActivity.setPicture(imageUrl);
+                newActivity.setState(state);
 
 
                 // 5. 从ViewModel获取主办方ID
