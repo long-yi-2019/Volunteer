@@ -6,18 +6,18 @@ public class Record {
     private Integer id;
     private String picture;
     private Integer volunteerTime;
-    private Date date;
+    private String date;
     private Integer state;
-    private Integer userId;
+    private String userId;
     private Integer activityId;
-    private Integer hostId;
+    private String hostId;
     private String activityName;
     private String content;
 
     public Record() {
     }
 
-    public Record(Integer id, String picture, Integer volunteerTime, Date date, Integer state, Integer userId, Integer activityId, Integer hostId,String content) {
+    public Record(Integer id, String picture, Integer volunteerTime, String date, Integer state, String userId, Integer activityId, String hostId,String content) {
         this.id = id;
         this.picture = picture;
         this.volunteerTime = volunteerTime;
@@ -53,11 +53,11 @@ public class Record {
         this.volunteerTime = volunteerTime;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -69,11 +69,11 @@ public class Record {
         this.state = state;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -85,11 +85,11 @@ public class Record {
         this.activityId = activityId;
     }
 
-    public Integer getHostId() {
+    public String getHostId() {
         return hostId;
     }
 
-    public void setHostId(Integer hostId) {
+    public void setHostId(String hostId) {
         this.hostId = hostId;
     }
 

@@ -11,12 +11,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Entity.Activity;
 import com.example.myapplication.Entity.Record;
+import com.example.myapplication.Entity.ShowRecord;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class RecordListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecordAdapter adapter;
     private EditText searchEditText;
+    private String userId;
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -32,22 +35,76 @@ public class RecordListFragment extends Fragment {
         // 绑定视图
         searchEditText = view.findViewById(R.id.search_edit_text);
         recyclerView = view.findViewById(R.id.activities_recycler_view);
-//        getSampleActivities();
         // 设置RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-//        List<Record> records = dbHelper.getRecordList();
-//        adapter = new ActivityAdapter(records, record -> {
-//            // 导航到活动详情
-//            Bundle bundle = new Bundle();
-//            bundle.putString("activity_name", record.getName());
-//            bundle.putString("activity_location", record.getArea());
-//            bundle.putString("activity_time", activity.getBeginTime());
-//            bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
-//            bundle.putInt("activity_id", activity.getId());
-//            Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
-//        });
-//        recyclerView.setAdapter(adapter);
+        VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
+        viewModel.getUsername().observe(getViewLifecycleOwner(), username -> {
+            if (username != null) {
+                System.out.println("username:" + username);
+                userId = username;
+            }
+        });
+        viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
+            if(role!=null){
+                if(role.equals("Volunteer")){
+                        if(userId!=null){
+                            System.out.println("username:"+userId);
+                            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                            List<ShowRecord> records = dbHelper.getRecordsByUserId(userId);
+                            RecordAdapter adapter = new RecordAdapter(records, record -> {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("username", record.getUserId());
+                                bundle.putString("activity_name", record.getActivityName());
+                                bundle.putString("date", record.getDate());
+                                bundle.putInt("record_id",record.getId());
+                                bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
+                                bundle.putInt("state",record.getState());
+                                Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
+                            });
+                            recyclerView.setAdapter(adapter);
+                            dbHelper.close();
+                        }
+
+                }else if(role.equals("Organizer")){
+                    if(userId!=null){
+                        System.out.println("username:"+userId);
+                        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                        List<ShowRecord> records = dbHelper.getRecordsHostId(userId);
+                        RecordAdapter adapter = new RecordAdapter(records, record -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("username", record.getUserId());
+                            bundle.putString("activity_name", record.getActivityName());
+                            bundle.putString("date", record.getDate());
+                            bundle.putInt("record_id",record.getId());
+                            bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
+                            bundle.putInt("state",record.getState());
+                            Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
+                        });
+                        recyclerView.setAdapter(adapter);
+                        dbHelper.close();
+                    }
+                }else{
+                    DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                    List<ShowRecord> records = dbHelper.getAllRecords();
+                    RecordAdapter adapter = new RecordAdapter(records, record -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", record.getUserId());
+                        bundle.putString("activity_name", record.getActivityName());
+                        bundle.putString("date", record.getDate());
+                        bundle.putInt("record_id",record.getId());
+                        bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
+                        bundle.putInt("state",record.getState());
+                        Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
+                    });
+                    recyclerView.setAdapter(adapter);
+                    dbHelper.close();
+                }
+            }
+        });
+
+
+
+
 
         // 搜索按钮
         view.findViewById(R.id.search_button).setOnClickListener(v -> {

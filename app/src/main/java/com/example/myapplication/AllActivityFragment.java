@@ -24,6 +24,7 @@ public class AllActivityFragment extends Fragment {
     private RecyclerView recyclerView;
     private ActivityAdapter adapter;
     private EditText searchEditText;
+    private String userId;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,13 +36,18 @@ public class AllActivityFragment extends Fragment {
         // 设置RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-
+        viewModel.getUsername().observe(getViewLifecycleOwner(), username -> {
+            if(username!=null){
+                userId=username;
+                System.out.println("!!!!!!!!!!"+username);
+            }
+        });
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
             List<Activity> activities=null;
             if (role.equals("Volunteer")){
-                activities = dbHelper.getActivityList();
+                activities  = dbHelper.getActivitiesByUsername(userId);
             } else if (role.equals("Organizer")) {
-                activities = dbHelper.getActivityList();
+                activities = dbHelper.getActivityListByHostId(userId);
 
             }else {
                 activities = dbHelper.getActivityList();
@@ -59,7 +65,7 @@ public class AllActivityFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
         });
-
+        dbHelper.close();
         // 搜索按钮
         view.findViewById(R.id.search_button).setOnClickListener(v -> {
             String query = searchEditText.getText().toString();

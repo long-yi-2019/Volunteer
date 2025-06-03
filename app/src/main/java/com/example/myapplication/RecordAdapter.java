@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Entity.Activity;
@@ -37,10 +38,37 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
         ShowRecord record = records.get(position);
-        holder.activityNameTextView.setText(record.getActivityName());
-        holder.timeTextView.setText(record.getDate().toString());
+        DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
+        holder.activityNameTextView.setText(dbHelper.getActivityNameById(record.getActivityId()).getName());
+        holder.timeTextView.setText(record.getDate());
         holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()));
+        int state = record.getState();
+        String stateText="待审核";
+        int styleResId=R.style.StateTextPending;
+
+        switch (state) {
+            case 0:
+                stateText = "待审核";
+                styleResId = R.style.StateTextPending;
+                break;
+            case 1:
+                stateText = "未通过";
+                styleResId = R.style.StateTextRejected;
+                break;
+            case 2:
+                stateText = "已通过";
+                styleResId = R.style.StateTextApproved;
+                break;
+            default:
+                break;
+        }
+
+        // 动态应用样式
+        TextViewCompat.setTextAppearance(holder.recordStateTextView, styleResId);
+        holder.recordStateTextView.setText(stateText);
+
         holder.itemView.setOnClickListener(v -> listener.onRecordClick(record));
+
     }
 
     @Override
@@ -52,11 +80,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView activityNameTextView;
         TextView timeTextView;
         TextView durationTextView;
+        TextView recordStateTextView;
         ViewHolder(View itemView) {
             super(itemView);
             activityNameTextView = itemView.findViewById(R.id.record_activityName_text);
             timeTextView = itemView.findViewById(R.id.record_time_text);
             durationTextView = itemView.findViewById(R.id.record_duration_text);
+            recordStateTextView=itemView.findViewById(R.id.record_state_text);
         }
     }
 

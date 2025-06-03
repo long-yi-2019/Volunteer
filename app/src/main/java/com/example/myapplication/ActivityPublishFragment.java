@@ -48,6 +48,7 @@ public class ActivityPublishFragment extends Fragment {
     String url = null;
 
     String state = "0";
+    String username;
 
     private void setupImagePicker() {
         imagePickerLauncher = registerForActivityResult(
@@ -131,6 +132,14 @@ public class ActivityPublishFragment extends Fragment {
         timeEditText.setOnClickListener(v -> showDateTimePicker(timeEditText));
         endTimeText.setOnClickListener(v -> showDateTimePicker(endTimeText));
         uploadContainer.setOnClickListener(v -> openImageChooser());
+        VolunteerViewModel viewModel = new ViewModelProvider(requireActivity())
+                .get(VolunteerViewModel.class);
+        viewModel.getUsername().observe(getViewLifecycleOwner(), username -> {
+            if (username != null) {
+                username=String.valueOf(viewModel.getUsername());
+            }
+        });
+
         // 发布按钮
         publishButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString();
@@ -171,13 +180,10 @@ public class ActivityPublishFragment extends Fragment {
                 newActivity.setVolunteerTime(volunteertime);
                 newActivity.setPicture(imageUrl);
                 newActivity.setState(state);
+                newActivity.setHostId(username);
 
 
-                // 5. 从ViewModel获取主办方ID
-                VolunteerViewModel viewModel = new ViewModelProvider(requireActivity())
-                        .get(VolunteerViewModel.class);
-                newActivity.setHostId(String.valueOf(viewModel.getUsername()));
-                // 6. 存入数据库
+                // 5. 存入数据库
                 DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
                 long result = dbHelper.addActivity(newActivity);
 
