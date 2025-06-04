@@ -651,8 +651,6 @@ public boolean login(String username, String password,String role) {
         } finally {
             db.close();
         }
-
-
     }
     /**
      * 根据用户名获取该用户报名的所有活动

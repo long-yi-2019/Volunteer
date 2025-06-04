@@ -33,6 +33,7 @@ public class ActivitySearchFragment extends Fragment {
         // 绑定视图
         searchEditText = view.findViewById(R.id.search_edit_text);
         recyclerView = view.findViewById(R.id.activities_recycler_view);
+//        getSampleActivities();
         // 设置RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
@@ -45,20 +46,44 @@ public class ActivitySearchFragment extends Fragment {
             bundle.putString("activity_time", activity.getBeginTime());
             bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
             bundle.putInt("activity_id", activity.getId());
-            bundle.putString("activity_state", activity.getState());
-            System.out.println(activity.toString());
             Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
         });
         recyclerView.setAdapter(adapter);
 
         // 搜索按钮
-        view.findViewById(R.id.search_button).setOnClickListener(v -> {
-            String query = searchEditText.getText().toString();
-            Toast.makeText(requireContext(), "搜索: " + query, Toast.LENGTH_SHORT).show();
 
+
+        view.findViewById(R.id.search_button).setOnClickListener(v -> {
+            String query = searchEditText.getText().toString().trim();
+
+            if (query.isEmpty()) {
+                Toast.makeText(requireContext(), "请输入搜索内容", Toast.LENGTH_SHORT).show();
+                return;
+            }
             // TODO: 实现搜索过滤逻辑
+            // 执行搜索
+            List<Activity> searchResults = dbHelper.searchActivitiesByName(query);
+            if (searchResults.isEmpty()) {
+                Toast.makeText(requireContext(), "未找到相关活动", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), "找到" + searchResults.size() + "个活动",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            // 更新RecyclerView
+            adapter= new ActivityAdapter(searchResults, activity -> {
+                // 导航到活动详情
+                Bundle bundle = new Bundle();
+                bundle.putString("activity_name", activity.getName());
+                bundle.putString("activity_location", activity.getArea());
+                bundle.putString("activity_time", activity.getBeginTime());
+                bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
+                bundle.putInt("activity_id", activity.getId());
+                Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
+            });
+            recyclerView.setAdapter(adapter);
         });
-        dbHelper.close();
+
         return view;
     }
 
