@@ -783,6 +783,7 @@ public boolean login(String username, String password,String role) {
     }
 
 
+    @SuppressLint("Range")
     public Activity getActivityNameById(Integer id){
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM activity WHERE id = ?";
@@ -811,6 +812,7 @@ public boolean login(String username, String password,String role) {
         return activity;
     }
 
+    @SuppressLint("Range")
     public Activity getActivityNameByHostId(String id){
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM activity WHERE hostid = ?";
@@ -1344,6 +1346,24 @@ public int getActivityNumberWaitForVerify() {
         return recordList;
 
 
+    }
+
+    public int getUserVolunteerTime(String username){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] selectionArgs = {username};
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(volunteer_time) FROM record WHERE user_id = ?",
+                selectionArgs
+        );
+        int total = 0;
+        if (cursor.moveToFirst()) {
+            if (!cursor.isNull(0)) {
+                total = cursor.getInt(0);
+            }
+        }
+        cursor.close();
+        db.close();
+        return total;
     }
 
     /**

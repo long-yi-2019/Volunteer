@@ -66,7 +66,7 @@
                 android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="志愿时长：8h"
+                android:text="志愿时长：0h"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp"/>

@@ -134,11 +134,7 @@ public class ActivityPublishFragment extends Fragment {
         uploadContainer.setOnClickListener(v -> openImageChooser());
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity())
                 .get(VolunteerViewModel.class);
-        viewModel.getUsername().observe(getViewLifecycleOwner(), username -> {
-            if (username != null) {
-                username=String.valueOf(viewModel.getUsername());
-            }
-        });
+
 
         // 发布按钮
         publishButton.setOnClickListener(v -> {
@@ -180,8 +176,10 @@ public class ActivityPublishFragment extends Fragment {
                 newActivity.setVolunteerTime(volunteertime);
                 newActivity.setPicture(imageUrl);
                 newActivity.setState(state);
-                newActivity.setHostId(username);
-
+                viewModel.getUsername().observe(getViewLifecycleOwner(),username -> {
+                    Log.d("DEBUG",username);
+                    newActivity.setHostId(username);
+                });
 
                 // 5. 存入数据库
                 DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
@@ -198,6 +196,7 @@ public class ActivityPublishFragment extends Fragment {
                             "发布失败，请重试",
                             Toast.LENGTH_SHORT).show();
                 }
+                dbHelper.close();
             } catch (NumberFormatException e) {
                 Toast.makeText(requireContext(),
                         "人数和时长必须为数字",

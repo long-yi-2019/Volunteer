@@ -60,6 +60,8 @@ public class PersonalCenterFragment extends Fragment {
         TextView readyVerifyNumber = view.findViewById(R.id.ready_verify_number);
         Button recordButton = view.findViewById(R.id.record_button);
         TextView readyText = view.findViewById(R.id.ready_text);
+        TextView timeText = view.findViewById(R.id.time_text);
+
 
         // 初始化ViewModel
 
@@ -68,6 +70,7 @@ public class PersonalCenterFragment extends Fragment {
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
             Username = name;
             System.out.println("!!!!!!!!!!"+Username);
+            timeText.setText("志愿时长："+ databaseHelper.getUserVolunteerTime(Username)+"h");
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recordsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

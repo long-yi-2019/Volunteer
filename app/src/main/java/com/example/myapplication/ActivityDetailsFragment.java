@@ -74,29 +74,40 @@ public class ActivityDetailsFragment extends Fragment {
 
         // 预约按钮
         bookButton.setOnClickListener(v -> {
-//            Toast.makeText(requireContext(), "已预约: " + nameTextView.getText(), Toast.LENGTH_SHORT).show();
+            bookButton.setEnabled(false); // 防止重复点击
 
-            // 名字
             viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
                 currentUser = name;
-                Log.d("DEBUG", "获取到用户名: " + currentUser);
-                // 在这里更新UI或执行后续操作
-            });
-            DatabaseHelper db = new DatabaseHelper(requireContext());
-            int result = db.registerActivityWithChecks(currentUser, activityId);
-            switch (result) {
-                case 1:
-//                    Toast.makeText(requireContext(), "预约成功" , Toast.LENGTH_SHORT).show();
-                    bookButton.setVisibility(View.GONE);
-                    NavController navController = Navigation.findNavController(view);
-                    break;
-                case 0:  errorText.setText("您已预约过该活动");return;
-                case -1:  errorText.setText("活动名额已满"); return;
-                case -2:  errorText.setText("活动已结束"); return;
-                default:  errorText.setText("预约失败");return;
-            }
-            db.close();
 
+                DatabaseHelper db = new DatabaseHelper(requireContext());
+                int result = db.registerActivityWithChecks(currentUser, activityId);
+
+                switch (result) {
+                    case 1:
+                        Toast.makeText(requireContext(), "预约成功", Toast.LENGTH_SHORT).show();
+                        bookButton.setVisibility(View.GONE);
+                        NavController navController = Navigation.findNavController(v);
+                        navController.popBackStack(); // 返回上一页
+                        break;
+                    case 0:
+                        errorText.setText("您已预约过该活动");
+                        bookButton.setEnabled(true);
+                        return;
+                    case -1:
+                        errorText.setText("活动名额已满");
+                        bookButton.setEnabled(true);
+                        return;
+                    case -2:
+                        errorText.setText("活动已结束");
+                        bookButton.setEnabled(true);
+                        return;
+                    default:
+                        errorText.setText("预约失败");
+                        bookButton.setEnabled(true);
+                        return;
+                }
+                db.close();
+            });
         });
         deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(v -> {

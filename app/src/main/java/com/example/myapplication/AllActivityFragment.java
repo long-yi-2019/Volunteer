@@ -43,12 +43,11 @@ public class AllActivityFragment extends Fragment {
             }
         });
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
-            List<Activity> activities=null;
+            List<Activity> activities;
             if (role.equals("Volunteer")){
                 activities  = dbHelper.getActivitiesByUsername(userId);
             } else if (role.equals("Organizer")) {
                 activities = dbHelper.getActivityListByHostId(userId);
-
             }else {
                 activities = dbHelper.getActivityList();
             }
