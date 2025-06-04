@@ -40,6 +40,10 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         holder.locationTextView.setText(activity.getArea());
         holder.timeTextView.setText(activity.getBeginTime());
         holder.durationTextView.setText(String.valueOf(activity.getVolunteerTime()));
+        holder.endingTimeTextView.setText(activity.getEndTime());
+        holder.activityUserTextView.setText(
+                activity.getActualCount()+" / " +activity.getCount()
+        );
         holder.itemView.setOnClickListener(v -> listener.onActivityClick(activity));
     }
 
@@ -53,13 +57,18 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         TextView locationTextView;
         TextView timeTextView;
         TextView durationTextView;
+        TextView endingTimeTextView;
+        TextView activityUserTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.activity_name_text);
             locationTextView = itemView.findViewById(R.id.activity_location_text);
             timeTextView = itemView.findViewById(R.id.activity_time_text);
+            endingTimeTextView = itemView.findViewById(R.id.activity_ending_time_text);
             durationTextView = itemView.findViewById(R.id.activity_duration_text);
+            activityUserTextView = itemView.findViewById(R.id.activity_user_text);
+
         }
     }
 }

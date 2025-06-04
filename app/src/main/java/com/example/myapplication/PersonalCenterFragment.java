@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Entity.Account;
 import com.example.myapplication.Entity.Activity;
+import com.example.myapplication.Entity.Record;
 import com.example.myapplication.Entity.ShowRecord;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class PersonalCenterFragment extends Fragment {
         TextView readyVerifyNumber = view.findViewById(R.id.ready_verify_number);
         Button recordButton = view.findViewById(R.id.record_button);
         TextView readyText = view.findViewById(R.id.ready_text);
+
         // 初始化ViewModel
 
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
@@ -105,19 +107,21 @@ public class PersonalCenterFragment extends Fragment {
                 s="组织者";
                 allActivity.setText("全部已发布活动");
                 recordButton.setText("全部记录");
-                setupRecordRecyclerView(Username, recordsRecyclerView, recordTextView, view);
+                setupRecordRecyclerViewByHostId(Username, recordsRecyclerView, recordTextView, view);
+                readyVerifyNumber.setText(String.valueOf(databaseHelper.getOrganizerAllRecordsReady(Username)));
             }else {
                 s="管理员";
                 allActivity.setText("全部活动");
                 recordButton.setText("全部记录");
                 readyText.setText("待审核活动");
-                setupRecordRecyclerView(Username, recordsRecyclerView, recordTextView, view);
+                setupActivityRecyclerViewForAdmin(recyclerView,placeholderText,view);
+                readyVerifyNumber.setText(String.valueOf(databaseHelper.getAllRecordsReady()));
             }
             roleTextView.setText("角色: " + s);
-//            readyNumberLayout.setVisibility(role.equals("Organizer")?View.GONE:View.VISIBLE);
+            readyNumberLayout.setVisibility(role.equals("Organizer")?View.GONE:View.VISIBLE);
             volunteerRecordButton.setVisibility(role.equals("Volunteer")?View.VISIBLE:View.GONE);
             publishButton.setVisibility(role.equals("Organizer") || role.equals("Admin") ? View.VISIBLE : View.GONE);
-            verifyNumber.setVisibility(role.equals("Admin") ? View.VISIBLE : View.GONE);
+            verifyNumber.setVisibility(role.equals("Volunteer") ? View.GONE : View.VISIBLE);
         });
 //  设置红点的数字
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
@@ -138,7 +142,6 @@ public class PersonalCenterFragment extends Fragment {
             }else {
                 readyPointNumber.setText(String.valueOf(databaseHelper.getActivityNumberByUserName(name)));
             }
-            readyVerifyNumber.setText(String.valueOf(0));
         });
 
 
@@ -153,7 +156,6 @@ public class PersonalCenterFragment extends Fragment {
 
 
     private void setupActivityRecyclerViewForAdmin(RecyclerView recyclerView, TextView placeholderText,View view){
-
         List<Activity> activities = databaseHelper.selectActivitiesByState();
         if (activities != null && !activities.isEmpty()) {
             placeholderText.setVisibility(View.GONE);
@@ -165,6 +167,7 @@ public class PersonalCenterFragment extends Fragment {
                 bundle.putString("activity_time", activity.getBeginTime());
                 bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
                 bundle.putInt("activity_id", activity.getId());
+                bundle.putString("activity_state", activity.getState());
                 Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
             });
             recyclerView.setAdapter(adapter);
@@ -172,6 +175,7 @@ public class PersonalCenterFragment extends Fragment {
             placeholderText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
+        databaseHelper.close();
     }
     @Override
     public void onDestroy() {
@@ -194,6 +198,7 @@ public class PersonalCenterFragment extends Fragment {
                 bundle.putString("activity_time", activity.getBeginTime());
                 bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
                 bundle.putInt("activity_id", activity.getId());
+                bundle.putString("activity_state", activity.getState());
                 Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityDetailsFragment, bundle);
             });
             recyclerView.setAdapter(adapter);
@@ -201,18 +206,22 @@ public class PersonalCenterFragment extends Fragment {
             placeholderText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
+        databaseHelper.close();
     }
     private void setupRecordRecyclerView(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
-        List<ShowRecord> records = databaseHelper.selectRecordByUserName(username);
+        List<ShowRecord> records = databaseHelper.selectRecordByState0();
         if (records != null && !records.isEmpty()) {
             placeholderText.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             RecordAdapter adapter = new RecordAdapter(records, record -> {
                 Bundle bundle = new Bundle();
+                bundle.putString("username", record.getUserId());
                 bundle.putString("activity_name", record.getActivityName());
-                bundle.putString("activity_location", record.getActivityName());
-                bundle.putString("activity_time", record.getDate().toString());
+                bundle.putString("date", record.getDate());
                 bundle.putInt("record_id",record.getId());
+                bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
+                bundle.putInt("state",record.getState());
+                Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_recordDetailsFragment, bundle);
             });
             recyclerView.setAdapter(adapter);
         } else {
@@ -221,4 +230,25 @@ public class PersonalCenterFragment extends Fragment {
         }
     }
 
+    private void setupRecordRecyclerViewByHostId(String username, RecyclerView recyclerView, TextView placeholderText, View view) {
+        List<ShowRecord> records = databaseHelper.selectRecordByHostId(username);
+        if (records != null && !records.isEmpty()) {
+            placeholderText.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            RecordAdapter adapter = new RecordAdapter(records, record -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("username", record.getUserId());
+                bundle.putString("activity_name", record.getActivityName());
+                bundle.putString("date", record.getDate());
+                bundle.putInt("record_id",record.getId());
+                bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
+                bundle.putInt("state",record.getState());
+                Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_recordDetailsFragment, bundle);
+            });
+            recyclerView.setAdapter(adapter);
+        } else {
+            placeholderText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
 }

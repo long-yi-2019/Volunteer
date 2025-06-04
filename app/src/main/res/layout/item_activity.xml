@@ -54,6 +54,16 @@
                 app:drawableStartCompat="@drawable/date"
                 android:drawablePadding="8dp" />
 
+            <TextView
+                android:id="@+id/activity_ending_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间：2025-04-10 14:00"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"
+                app:drawableStartCompat="@drawable/date"
+                android:drawablePadding="8dp" />
+
             <!-- 时长 -->
             <TextView
                 android:id="@+id/activity_duration_text"

@@ -33,7 +33,6 @@ public class ActivitySearchFragment extends Fragment {
         // 绑定视图
         searchEditText = view.findViewById(R.id.search_edit_text);
         recyclerView = view.findViewById(R.id.activities_recycler_view);
-//        getSampleActivities();
         // 设置RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
@@ -46,6 +45,7 @@ public class ActivitySearchFragment extends Fragment {
             bundle.putString("activity_time", activity.getBeginTime());
             bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
             bundle.putInt("activity_id", activity.getId());
+            bundle.putString("activity_state", activity.getState());
             System.out.println(activity.toString());
             Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
         });

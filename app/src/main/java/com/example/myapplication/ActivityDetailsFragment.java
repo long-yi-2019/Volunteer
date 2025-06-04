@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.myapplication.Entity.Activity;
+
+import java.util.Objects;
 
 public class ActivityDetailsFragment extends Fragment {
     String currentUser;
@@ -46,6 +51,7 @@ public class ActivityDetailsFragment extends Fragment {
         Button approveButton = view.findViewById(R.id.approve_button);
         Button rejectButton = view.findViewById(R.id.reject_button);
         LinearLayout buttonContainer = view.findViewById(R.id.button_container);
+        Button deleteButton = view.findViewById(R.id.delete_activity_button);
         // 获取传递的数据
         Bundle args = getArguments();
         if (args != null) {
@@ -56,8 +62,12 @@ public class ActivityDetailsFragment extends Fragment {
             locationTextView.setText(activityName.getArea());
             timeTextView.setText(activityName.getBeginTime());
             durationTextView.setText(activityName.getEndTime());
-            userText.setText(activityName.getCount()+"/"+activityName.getActualCount());
+            userText.setText(activityName.getActualCount()+" / "+ activityName.getCount());
             dbHelper.close();
+            if (!Objects.equals(args.getString("activity_state"), "0")){
+                approveButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }
         }
 
 
@@ -65,7 +75,6 @@ public class ActivityDetailsFragment extends Fragment {
         // 预约按钮
         bookButton.setOnClickListener(v -> {
 //            Toast.makeText(requireContext(), "已预约: " + nameTextView.getText(), Toast.LENGTH_SHORT).show();
-            // TODO: 实现预约逻辑
 
             // 名字
             viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
@@ -89,7 +98,25 @@ public class ActivityDetailsFragment extends Fragment {
             db.close();
 
         });
-
+        deleteButton.setVisibility(View.VISIBLE);
+        deleteButton.setOnClickListener(v -> {
+            DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("确认删除")
+                    .setMessage("确定要删除该活动吗？此操作不可恢复。")
+                    .setPositiveButton("删除", (dialog, which) -> {
+                        int result = databaseHelper.deleteActivity(activityId);
+                        if (result > 0) {
+                            Toast.makeText(requireContext(), "活动删除成功", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(v).popBackStack();
+                        } else {
+                            Toast.makeText(requireContext(), "删除失败，请重试", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+            databaseHelper.close();
+        });
 
         //如果是志愿者，预约活动后，则隐藏bookButton
         //如果是管理员，隐藏bookButton，显示buttonContainer，编写approveButton和rejectButton的点击事件
@@ -97,15 +124,26 @@ public class ActivityDetailsFragment extends Fragment {
             currentUser = role;
             Log.d("DEBUG","获取用户："+currentUser);
             DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+
             if (role.equals("Admin")){
                 bookButton.setVisibility(View.GONE);
-                buttonContainer.setVisibility(View.VISIBLE);
+                buttonContainer.setVisibility(VISIBLE);
                 approveButton.setOnClickListener(v -> {
                     databaseHelper.updateActivityState(activityId,"2");
+                    NavController navController = Navigation.findNavController(v);
+                    navController.popBackStack();
                 });
                 rejectButton.setOnClickListener(v -> {
                     databaseHelper.updateActivityState(activityId, "1");
+                    NavController navController = Navigation.findNavController(v);
+                    navController.popBackStack();
                 });
+                deleteButton.setVisibility(VISIBLE);
+            }else{
+                int st = databaseHelper.registerActivityWithChecks(currentUser,activityId);
+                System.out.println(st);
+                if(st==0) bookButton.setVisibility(View.GONE);
+
             }
             databaseHelper.close();
         });

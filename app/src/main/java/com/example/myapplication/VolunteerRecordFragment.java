@@ -24,8 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.myapplication.Entity.Activity;
+import com.example.myapplication.Entity.Record;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -136,7 +139,43 @@ public class VolunteerRecordFragment extends Fragment {
         activitySpinner.setAdapter(adapter);
 
         submitButton.setOnClickListener(v -> {
+            String activityName = activitySpinner.getSelectedItem().toString();
+            String volunteerTime = timeView.getText().toString();
+            String imageUrl = (url != null) ? url : null;
+            if (activityName.equals("请选择活动") || volunteerTime.isEmpty()) {
+                Toast.makeText(requireContext(), "请填写完整信息", Toast.LENGTH_SHORT).show();
+            } else {
+                // 创建一个记录对象
+                Record record = new Record();
+                record.setActivityName(activityName);
+                record.setVolunteerTime(Integer.parseInt(volunteerTime));
+                record.setState(0);
+                record.setUserId(UserName);
+                record.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+                record.setActivityId(dbHelper.selectActivityByName(activityName).getId());
+                record.setPicture(url);
+                record.setHostId(dbHelper.selectActivityByName(activityName).getHostId());
+                try {
+                    // 5. 存入数据库
+                    long result = dbHelper.addRecord(record);
 
+                    if (result != -1) {
+                        Toast.makeText(requireContext(),
+                                "记录提交成功！ID: " + result,
+                                Toast.LENGTH_SHORT).show();
+                        NavController navController = Navigation.findNavController(view);
+                        navController.popBackStack(); // 返回上一页
+                    } else {
+                        Toast.makeText(requireContext(),
+                                "提交失败，请重试",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(requireContext(),
+                            "时长必须为数字",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
         dbHelper.close();
