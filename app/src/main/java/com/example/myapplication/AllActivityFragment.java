@@ -64,13 +64,16 @@ public class AllActivityFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
         });
-        dbHelper.close();
-        // 搜索按钮
-        view.findViewById(R.id.search_button).setOnClickListener(v -> {
-            String query = searchEditText.getText().toString();
-            Toast.makeText(requireContext(), "搜索: " + query, Toast.LENGTH_SHORT).show();
 
+        view.findViewById(R.id.search_button).setOnClickListener(v -> {
+            String query = searchEditText.getText().toString().trim();
+
+            if (query.isEmpty()) {
+                Toast.makeText(requireContext(), "请输入搜索内容", Toast.LENGTH_SHORT).show();
+                return;
+            }
             // TODO: 实现搜索过滤逻辑
+            // 执行搜索
             List<Activity> searchResults = dbHelper.searchActivitiesByName(query);
             if (searchResults.isEmpty()) {
                 Toast.makeText(requireContext(), "未找到相关活动", Toast.LENGTH_SHORT).show();
@@ -88,7 +91,7 @@ public class AllActivityFragment extends Fragment {
                 bundle.putString("activity_time", activity.getBeginTime());
                 bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
                 bundle.putInt("activity_id", activity.getId());
-                Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_allActivityFragment_to_activityDetailsFragment, bundle);
             });
             recyclerView.setAdapter(adapter);
         });
@@ -98,5 +101,4 @@ public class AllActivityFragment extends Fragment {
 
 
 }
-
 

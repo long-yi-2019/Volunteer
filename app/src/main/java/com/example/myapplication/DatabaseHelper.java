@@ -1470,7 +1470,7 @@ public int getActivityNumberWaitForVerify() {
                 "FROM record r " +
                 "INNER JOIN activity a ON r.activity_id = a.id " +
                 "INNER JOIN account u ON r.user_id = u.id " +
-                "WHERE u.username = ? AND a.name LIKE ?";
+                "WHERE u.username = ? OR a.name LIKE ?";
 
         // 构建查询参数（活动名称前后加%）
         String[] selectionArgs = new String[]{

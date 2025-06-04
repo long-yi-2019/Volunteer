@@ -27,6 +27,7 @@ public class RecordListFragment extends Fragment {
     private RecordAdapter adapter;
     private EditText searchEditText;
     private String userId;
+//    private DatabaseHelper databaseHelper;
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -45,29 +46,29 @@ public class RecordListFragment extends Fragment {
             }
         });
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
-            if(role!=null){
-                if(role.equals("Volunteer")){
-                        if(userId!=null){
-                            System.out.println("username:"+userId);
-                            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
-                            List<ShowRecord> records = dbHelper.getRecordsByUserId(userId);
-                            RecordAdapter adapter = new RecordAdapter(records, record -> {
-                                Bundle bundle = new Bundle();
-                                bundle.putString("username", record.getUserId());
-                                bundle.putString("activity_name", record.getActivityName());
-                                bundle.putString("date", record.getDate());
-                                bundle.putInt("record_id",record.getId());
-                                bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
-                                bundle.putInt("state",record.getState());
-                                Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
-                            });
-                            recyclerView.setAdapter(adapter);
-                            dbHelper.close();
-                        }
+            if (role != null) {
+                if (role.equals("Volunteer")) {
+                    if (userId != null) {
+                        System.out.println("username:" + userId);
+                        DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+                        List<ShowRecord> records = dbHelper.getRecordsByUserId(userId);
+                        RecordAdapter adapter = new RecordAdapter(records, record -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putString("username", record.getUserId());
+                            bundle.putString("activity_name", record.getActivityName());
+                            bundle.putString("date", record.getDate());
+                            bundle.putInt("record_id", record.getId());
+                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                            bundle.putInt("state", record.getState());
+                            Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
+                        });
+                        recyclerView.setAdapter(adapter);
+                        dbHelper.close();
+                    }
 
-                }else if(role.equals("Organizer")){
-                    if(userId!=null){
-                        System.out.println("username:"+userId);
+                } else if (role.equals("Organizer")) {
+                    if (userId != null) {
+                        System.out.println("username:" + userId);
                         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
                         List<ShowRecord> records = dbHelper.getRecordsHostId(userId);
                         RecordAdapter adapter = new RecordAdapter(records, record -> {
@@ -75,15 +76,15 @@ public class RecordListFragment extends Fragment {
                             bundle.putString("username", record.getUserId());
                             bundle.putString("activity_name", record.getActivityName());
                             bundle.putString("date", record.getDate());
-                            bundle.putInt("record_id",record.getId());
-                            bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
-                            bundle.putInt("state",record.getState());
+                            bundle.putInt("record_id", record.getId());
+                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                            bundle.putInt("state", record.getState());
                             Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
                         });
                         recyclerView.setAdapter(adapter);
                         dbHelper.close();
                     }
-                }else{
+                } else {
                     DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
                     List<ShowRecord> records = dbHelper.getAllRecords();
                     RecordAdapter adapter = new RecordAdapter(records, record -> {
@@ -91,9 +92,9 @@ public class RecordListFragment extends Fragment {
                         bundle.putString("username", record.getUserId());
                         bundle.putString("activity_name", record.getActivityName());
                         bundle.putString("date", record.getDate());
-                        bundle.putInt("record_id",record.getId());
-                        bundle.putString("volunteer_time",  record.getVolunteerTime().toString()+"（小时）");
-                        bundle.putInt("state",record.getState());
+                        bundle.putInt("record_id", record.getId());
+                        bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                        bundle.putInt("state", record.getState());
                         Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
                     });
                     recyclerView.setAdapter(adapter);
@@ -103,16 +104,50 @@ public class RecordListFragment extends Fragment {
         });
 
 
-
-
-
-        // 搜索按钮
         view.findViewById(R.id.search_button).setOnClickListener(v -> {
+            // 获取搜索框中的文本
             String query = searchEditText.getText().toString();
+            // 显示提示信息，反馈用户输入的搜索内容
             Toast.makeText(requireContext(), "搜索: " + query, Toast.LENGTH_SHORT).show();
+            DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
+            // 实现搜索过滤逻辑
+            List<ShowRecord> searchResults = dbHelper.selectRecordByActivityName(query);
+            if (searchResults.isEmpty()) {
+                // 若未找到相关记录，提示用户
+                Toast.makeText(requireContext(), "未找到相关记录", Toast.LENGTH_SHORT).show();
+            } else {
+                // 找到记录时，提示用户找到的记录数量
+                Toast.makeText(requireContext(), "找到" + searchResults.size() + "个活动", Toast.LENGTH_SHORT).show();
 
-            // TODO: 实现搜索过滤逻辑
+                // 获取RecyclerView
+                RecyclerView recyclerView = view.findViewById(R.id.activities_recycler_view);
+                // 创建RecordAdapter并传入搜索结果和点击事件处理逻辑
+                adapter = new RecordAdapter(searchResults, record -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", record.getUserId());
+                    bundle.putString("activity_name", record.getActivityName());
+                    bundle.putString("date", record.getDate());
+                    bundle.putInt("record_id", record.getId());
+                    bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                    bundle.putInt("state", record.getState());
+
+                    // 执行页面跳转逻辑，将相关数据传递到活动详情页面
+                    try {
+                        Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_recordDetailsFragment, bundle);
+                    } catch (Exception e) {
+                        // 捕获跳转过程中的异常，打印错误日志，方便排查问题
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "页面跳转失败，请检查设置", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // 为RecyclerView设置新的适配器，更新显示内容
+
+                recyclerView.setAdapter(adapter);
+            }
+            dbHelper.close();
         });
+
+
         return view;
     }
 }
