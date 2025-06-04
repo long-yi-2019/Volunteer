@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
@@ -109,7 +110,7 @@ public class ActivityDetailsFragment extends Fragment {
                 db.close();
             });
         });
-        deleteButton.setVisibility(View.VISIBLE);
+//        deleteButton.setVisibility(View.VISIBLE);
         deleteButton.setOnClickListener(v -> {
             DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
             new AlertDialog.Builder(requireContext())
@@ -150,8 +151,13 @@ public class ActivityDetailsFragment extends Fragment {
                     navController.popBackStack();
                 });
                 deleteButton.setVisibility(VISIBLE);
-            }else{
-                int st = databaseHelper.registerActivityWithChecks(currentUser,activityId);
+            }
+            else if(role.equals("Organizer"))
+            {
+                bookButton.setVisibility(INVISIBLE);
+            }
+            else{
+                int st = databaseHelper.ActivityWithChecks(currentUser,activityId);
                 System.out.println(st);
                 if(st==0) bookButton.setVisibility(View.GONE);
 

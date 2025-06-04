@@ -161,10 +161,10 @@
                 android:id="@+id/all_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="160dp"
                 android:text="全部已报名活动"
-                android:textSize="16sp"
                 android:textColor="#2196F3"
-                android:layout_marginStart="160dp"/>
+                android:textSize="16sp" />
 
         </LinearLayout>
 

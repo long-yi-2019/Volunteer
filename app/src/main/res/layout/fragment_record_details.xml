@@ -76,16 +76,18 @@
 
         <TextView
             android:id="@+id/record_state_text"
+            style="@style/StateTextApproved"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="通过"
             android:layout_gravity="center"
-            android:textSize="30sp"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="50dp"
+            android:layout_marginBottom="15dp"
+            android:autoText="false"
             android:drawablePadding="8dp"
-            android:visibility="visible"
-            style="@style/StateTextApproved"/>
+            android:text="通过"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:visibility="visible" />
 
         <TextView
             android:layout_width="match_parent"

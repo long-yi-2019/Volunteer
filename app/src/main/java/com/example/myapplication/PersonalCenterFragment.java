@@ -110,6 +110,7 @@ public class PersonalCenterFragment extends Fragment {
                 s="组织者";
                 allActivity.setText("全部已发布活动");
                 recordButton.setText("全部记录");
+                timeText.setVisibility(View.GONE);
                 setupRecordRecyclerViewByHostId(Username, recordsRecyclerView, recordTextView, view);
                 readyVerifyNumber.setText(String.valueOf(databaseHelper.getOrganizerAllRecordsReady(Username)));
             }else {
@@ -117,6 +118,7 @@ public class PersonalCenterFragment extends Fragment {
                 allActivity.setText("全部活动");
                 recordButton.setText("全部记录");
                 readyText.setText("待审核活动");
+                timeText.setVisibility(View.GONE);
                 setupActivityRecyclerViewForAdmin(recyclerView,placeholderText,view);
                 readyVerifyNumber.setText(String.valueOf(databaseHelper.getAllRecordsReady()));
             }
@@ -126,6 +128,7 @@ public class PersonalCenterFragment extends Fragment {
             publishButton.setVisibility(role.equals("Organizer") || role.equals("Admin") ? View.VISIBLE : View.GONE);
             verifyNumber.setVisibility(role.equals("Volunteer") ? View.GONE : View.VISIBLE);
         });
+
 //  设置红点的数字
         viewModel.getUsername().observe(getViewLifecycleOwner(), name -> {
             userName.setText(name);

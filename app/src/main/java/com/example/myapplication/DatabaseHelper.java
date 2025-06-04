@@ -601,6 +601,14 @@ public boolean login(String username, String password,String role) {
         }
     }
 
+
+    public int ActivityWithChecks(String username, int activityId) {
+        // 前置检查
+        if (isActivityEnded(activityId)) return -2;
+        if (isActivityFull(activityId)) return -1;
+        if (hasUserRegistered(username, activityId)) return 0;
+        else return 1;
+    }
     /**
      * 预约活动（整合所有检查）
      * @return 1=成功, 0=已预约过, -1=活动名额已满, -2=活动已结束, -3=错误
@@ -1350,7 +1358,7 @@ public int getActivityNumberWaitForVerify() {
         SQLiteDatabase db = getReadableDatabase();
         String[] selectionArgs = {username};
         Cursor cursor = db.rawQuery(
-                "SELECT SUM(volunteer_time) FROM record WHERE user_id = ?",
+                "SELECT SUM(volunteer_time) FROM record WHERE user_id = ? AND state= 2",
                 selectionArgs
         );
         int total = 0;
