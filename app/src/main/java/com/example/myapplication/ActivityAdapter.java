@@ -1,13 +1,16 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Entity.Activity;
 
 import java.util.List;
@@ -33,6 +36,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Activity activity = activities.get(position);
@@ -44,6 +48,11 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         holder.activityUserTextView.setText(
                 activity.getActualCount()+" / " +activity.getCount()
         );
+        String imageUrl = activity.getPicture();
+        Glide.with(holder.imageView.getContext())
+                .load(imageUrl != null && !imageUrl.isEmpty() ? imageUrl : null)
+                .fallback(R.mipmap.logo)
+                .into(holder.imageView);
         holder.itemView.setOnClickListener(v -> listener.onActivityClick(activity));
     }
 
@@ -60,6 +69,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         TextView endingTimeTextView;
         TextView activityUserTextView;
 
+        ImageView imageView;
+
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.activity_name_text);
@@ -68,7 +79,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             endingTimeTextView = itemView.findViewById(R.id.activity_ending_time_text);
             durationTextView = itemView.findViewById(R.id.activity_duration_text);
             activityUserTextView = itemView.findViewById(R.id.activity_user_text);
-
+            imageView = itemView.findViewById(R.id.activity_icon);
         }
     }
 }

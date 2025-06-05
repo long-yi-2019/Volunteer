@@ -8,4 +8,8 @@
         android:id="@+id/personalCenterFragment"
         android:title="个人中心"
         android:icon="@drawable/person_center"/>
+    <item
+        android:id="@+id/aiChatFragment"
+        android:icon="@drawable/girl_avatar"
+        android:title="客服" />
 </menu>

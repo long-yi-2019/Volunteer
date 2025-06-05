@@ -23,6 +23,7 @@
 
         <!--图片logo-->
         <ImageView
+            android:id="@+id/activity_image"
             android:layout_width="340dp"
             android:layout_height="220dp"
             android:layout_marginTop="30dp"

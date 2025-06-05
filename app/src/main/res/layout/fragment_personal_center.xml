@@ -91,6 +91,20 @@
                     android:textAllCaps="false"
                     android:layout_gravity="center_horizontal"/>
                 <Button
+                    android:id="@+id/view_profile_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="查看电子履历"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#FF5722"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center_horizontal"/>
+
+                <Button
                     android:id="@+id/volunteer_record_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -116,18 +130,6 @@
                     android:visibility="gone"
                     android:layout_marginStart="10dp"
                     />
-<!--                <Button-->
-<!--                    android:id="@+id/manage_button"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text="管理志愿者"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:textColor="@android:color/white"-->
-<!--                    android:backgroundTint="#4CAF50"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    />-->
                 <Button
                     android:id="@+id/record_button"
                     android:layout_width="0dp"
@@ -272,15 +274,5 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
             android:visibility="gone"/>
-
-        <!-- 分割线 -->
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:background="#EEE" />-->
-
-
-
     </LinearLayout>
 </ScrollView>

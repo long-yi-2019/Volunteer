@@ -46,9 +46,11 @@ public class RecordDetailsFragment extends Fragment {
         if (args != null) {
             activityNameTextView.setText(args.getString("activity_name", "未知活动"));
             Record recode = databaseHelper.selectRecordByRecordId(args.getInt("record_id"));
+            String picturePath = recode.getPicture();
 
             Glide.with(requireContext())
-                    .load(new File(recode.getPicture()))
+                    .load(picturePath != null ? new File(picturePath) : null)
+                    .fallback(R.mipmap.von_activity)  // 当 load(null) 时显示这个
                     .into(activityPictureImageView);
 
             userNameTextView.setText(args.getString("username", "未知用户"));

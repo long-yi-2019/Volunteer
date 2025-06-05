@@ -22,6 +22,8 @@ import com.example.myapplication.Entity.Activity;
 import com.example.myapplication.Entity.Record;
 import com.example.myapplication.Entity.ShowRecord;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class PersonalCenterFragment extends Fragment {
@@ -61,8 +63,7 @@ public class PersonalCenterFragment extends Fragment {
         Button recordButton = view.findViewById(R.id.record_button);
         TextView readyText = view.findViewById(R.id.ready_text);
         TextView timeText = view.findViewById(R.id.time_text);
-
-
+        Button viewProfileButton = view.findViewById(R.id.view_profile_button);
         // 初始化ViewModel
 
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
@@ -109,14 +110,16 @@ public class PersonalCenterFragment extends Fragment {
             } else if (role.equals("Organizer")) {
                 s="组织者";
                 allActivity.setText("全部已发布活动");
-                recordButton.setText("全部记录");
+                recordButton.setText("查看全部记录");
+                publishButton.setText("一键发布活动");
                 timeText.setVisibility(View.GONE);
                 setupRecordRecyclerViewByHostId(Username, recordsRecyclerView, recordTextView, view);
                 readyVerifyNumber.setText(String.valueOf(databaseHelper.getOrganizerAllRecordsReady(Username)));
             }else {
                 s="管理员";
-                allActivity.setText("全部活动");
-                recordButton.setText("全部记录");
+                allActivity.setText("查看全部活动");
+                recordButton.setText("查看全部记录");
+                publishButton.setText("一键发布活动");
                 readyText.setText("待审核活动");
                 timeText.setVisibility(View.GONE);
                 setupActivityRecyclerViewForAdmin(recyclerView,placeholderText,view);
@@ -157,6 +160,7 @@ public class PersonalCenterFragment extends Fragment {
         volunteerRecordButton.setOnClickListener(v -> Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_volunteerRecordFragment));
         allActivity.setOnClickListener(v->Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_activityAllActivityFragment));
         recordButton.setOnClickListener(v->Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_recordListFragment));
+        viewProfileButton.setOnClickListener(v->{Navigation.findNavController(view).navigate(R.id.action_personalCenterFragment_to_profileFragment);});
         return view;
     }
 
