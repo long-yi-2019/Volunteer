@@ -58,7 +58,7 @@ public class RecordListFragment extends Fragment {
                             bundle.putString("activity_name", record.getActivityName());
                             bundle.putString("date", record.getDate());
                             bundle.putInt("record_id", record.getId());
-                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "小时");
                             bundle.putInt("state", record.getState());
                             Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
                         });
@@ -77,7 +77,7 @@ public class RecordListFragment extends Fragment {
                             bundle.putString("activity_name", record.getActivityName());
                             bundle.putString("date", record.getDate());
                             bundle.putInt("record_id", record.getId());
-                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                            bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "小时");
                             bundle.putInt("state", record.getState());
                             Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
                         });
@@ -93,7 +93,7 @@ public class RecordListFragment extends Fragment {
                         bundle.putString("activity_name", record.getActivityName());
                         bundle.putString("date", record.getDate());
                         bundle.putInt("record_id", record.getId());
-                        bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                        bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "小时");
                         bundle.putInt("state", record.getState());
                         Navigation.findNavController(view).navigate(R.id.action_recordListFragment_to_recordDetailsFragment, bundle);
                     });
@@ -128,7 +128,7 @@ public class RecordListFragment extends Fragment {
                     bundle.putString("activity_name", record.getActivityName());
                     bundle.putString("date", record.getDate());
                     bundle.putInt("record_id", record.getId());
-                    bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "（小时）");
+                    bundle.putString("volunteer_time", record.getVolunteerTime().toString() + "小时");
                     bundle.putInt("state", record.getState());
 
                     // 执行页面跳转逻辑，将相关数据传递到活动详情页面

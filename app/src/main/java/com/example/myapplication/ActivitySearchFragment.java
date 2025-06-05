@@ -44,7 +44,7 @@ public class ActivitySearchFragment extends Fragment {
             bundle.putString("activity_name", activity.getName());
             bundle.putString("activity_location", activity.getArea());
             bundle.putString("activity_time", activity.getBeginTime());
-            bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()));
+            bundle.putString("activity_duration", String.valueOf(activity.getVolunteerTime()+"小时"));
             bundle.putInt("activity_id", activity.getId());
             Navigation.findNavController(view).navigate(R.id.action_activitySearchFragment_to_activityDetailsFragment, bundle);
         });

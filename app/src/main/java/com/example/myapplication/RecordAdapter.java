@@ -41,7 +41,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         DatabaseHelper dbHelper = new DatabaseHelper(holder.itemView.getContext());
         holder.activityNameTextView.setText(dbHelper.getActivityNameById(record.getActivityId()).getName());
         holder.timeTextView.setText(record.getDate());
-        holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()));
+        holder.durationTextView.setText(String.valueOf(record.getVolunteerTime()+"小时"));
         int state = record.getState();
         String stateText="待审核";
         int styleResId=R.style.StateTextPending;

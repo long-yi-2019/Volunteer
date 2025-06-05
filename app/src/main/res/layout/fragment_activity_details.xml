@@ -1,187 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@drawable/background_search_green">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:minHeight="730dp"
-        android:background="@drawable/background_search_green">
+        android:padding="16dp">
 
-        <!-- 活动名称 -->
+        <!-- Activity Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="活动详情"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
-        <!--图片logo-->
-        <ImageView
-            android:id="@+id/activity_image"
-            android:layout_width="340dp"
-            android:layout_height="220dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:src="@mipmap/von_activity"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/activity_name_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="活动名称：春季读书分享会"
+            android:textColor="#2E7D32"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <!-- 地点 -->
-        <TextView
-            android:id="@+id/activity_location_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="地点：图书馆三楼报告厅"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:drawablePadding="8dp"
-            app:drawableStartCompat="@drawable/position" />
-
-        <!-- 时间 -->
-        <TextView
-            android:id="@+id/activity_time_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="时间：2025年4月10日 14:00 - 16:00"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:drawablePadding="8dp"
-            app:drawableStartCompat="@drawable/date"/>
-
-        <!-- 时长 -->
-        <TextView
-            android:id="@+id/activity_duration_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="时长：2小时"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:drawablePadding="8dp"
-            app:drawableStartCompat="@drawable/time"/>
-        <!--  人数  -->
-        <TextView
-            android:id="@+id/activity_user_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="需要人数：18 / 20"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:drawablePadding="8dp"
-            app:drawableStartCompat="@drawable/user_front"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="活动介绍"
-            android:textSize="26sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/activity_description_text"
+        <!-- Activity Image -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:color/darker_gray"
+            android:elevation="4dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/von_activity" />
+        </FrameLayout>
+
+        <!-- Activity Details Container -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="24dp"
-            android:text="这是一场关于春季读书的精彩分享活动，欢迎大家积极参与。活动将围绕经典文学作品展开讨论，并提供丰富的互动环节。"
-            android:textSize="18sp"
-            android:textColor="#333333"
-            android:lineSpacingMultiplier="1.2"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"/>
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <!-- 预约按钮 -->
+            <!-- Activity Name -->
+            <TextView
+                android:id="@+id/activity_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="活动名称：春季读书分享会"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Location -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/position" />
+
+                <TextView
+                    android:id="@+id/activity_location_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="地点：图书馆三楼报告厅"
+                    android:textColor="#424242"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- Time -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/date" />
+
+                <TextView
+                    android:id="@+id/activity_time_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="时间：2025年4月10日 14:00 - 16:00"
+                    android:textColor="#424242"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- Duration -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/time" />
+
+                <TextView
+                    android:id="@+id/activity_duration_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="时长：2小时"
+                    android:textColor="#424242"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!-- Participants -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/user_front" />
+
+                <TextView
+                    android:id="@+id/activity_user_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="需要人数：18 / 20"
+                    android:textColor="#424242"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Activity Description Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="活动介绍"
+                android:textColor="#2E7D32"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/activity_description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="这是一场关于春季读书的精彩分享活动，欢迎大家积极参与。活动将围绕经典文学作品展开讨论，并提供丰富的互动环节。"
+                android:textColor="#616161"
+                android:textSize="16sp"
+                android:lineSpacingExtra="4dp" />
+        </LinearLayout>
+
+        <!-- Error Message -->
         <TextView
             android:id="@+id/error_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:textAlignment="center"
-            android:textColor="@color/colorError"
-        />
-        <!--如果预约了，隐藏预约按钮-->
+            android:gravity="center"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <!-- Book Button -->
         <Button
             android:id="@+id/book_button"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:backgroundTint="#3F51B5"
-            android:stateListAnimator="@null"
+            android:layout_marginBottom="16dp"
+            android:background="#3F51B5"
             android:text="立即预约"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:visibility="visible"/>
-        <!-- 通过 & 拒绝 按钮 -->
+            android:visibility="visible" />
+
+        <!-- Admin Buttons Container -->
         <LinearLayout
             android:id="@+id/button_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
-            android:paddingHorizontal="16dp"
-            android:weightSum="2"
             android:visibility="gone">
 
             <Button
                 android:id="@+id/approve_button"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:background="#4CAF50"
                 android:text="通过"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#4CAF50"
-                android:layout_marginEnd="8dp"/>
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/reject_button"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
+                android:background="#F44336"
                 android:text="拒绝"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#F44336"
-                android:layout_marginStart="8dp"/>
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
+
+        <!-- Delete Button -->
         <Button
             android:id="@+id/delete_activity_button"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:backgroundTint="#E24040"
-            android:stateListAnimator="@null"
+            android:layout_marginTop="8dp"
+            android:background="#E24040"
             android:text="删除活动"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"/>
-
-
+            android:visibility="gone" />
     </LinearLayout>
 </ScrollView>

@@ -60,10 +60,10 @@ public class ActivityDetailsFragment extends Fragment {
             DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
             Activity activityName = dbHelper.selectActivityByName(args.getString("activity_name"));
             descriptionTextView.setText(activityName.getContent());
-            locationTextView.setText(activityName.getArea());
-            timeTextView.setText(activityName.getBeginTime());
-            durationTextView.setText(activityName.getEndTime()+"小时");
-            userText.setText(activityName.getActualCount()+" / "+ activityName.getCount());
+            locationTextView.setText("地点:"+activityName.getArea());
+            timeTextView.setText("开始时间:"+activityName.getBeginTime());
+            durationTextView.setText("时长:"+activityName.getVolunteerTime()+"小时");
+            userText.setText("需要人数:"+activityName.getActualCount()+" / "+ activityName.getCount()+"人");
             dbHelper.close();
             if (!Objects.equals(args.getString("activity_state"), "0")){
                 approveButton.setVisibility(View.GONE);
