@@ -1091,9 +1091,9 @@ public int getActivityNumberWaitForVerify() {
                     record.setUserId(cursor.getString(cursor.getColumnIndexOrThrow("user_id")));
                     record.setActivityId(cursor.getInt(cursor.getColumnIndexOrThrow("activity_id")));
                     record.setHostId(cursor.getString(cursor.getColumnIndexOrThrow("host_id")));
-                    // 获取关联的活动名称和志愿者用户名
-                    record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
-                    record.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("volunteer_name")));
+//                    // 获取关联的活动名称和志愿者用户名
+//                    record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+//                    record.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("volunteer_name")));
                     // 若需关联用户名（从 account 表查询），需添加联查逻辑
                     // 示例联查：INNER JOIN account ON record.user_id = account.id
                     // 此处仅获取 record 表字段，如需 username 需修改 SQL 并调用 setUsername()
@@ -1438,9 +1438,8 @@ public int getActivityNumberWaitForVerify() {
                     if (hostIdIndex != -1) {
                         record.setHostId(cursor.getString(hostIdIndex));
                     }
-                    // 获取关联的活动名称和志愿者用户名
-                    record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
-                    record.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("volunteer_name")));
+
+
                     recordList.add(record);
                 } while (cursor.moveToNext());
             }
