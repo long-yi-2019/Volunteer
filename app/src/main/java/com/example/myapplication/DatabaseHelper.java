@@ -981,7 +981,7 @@ public int getActivityNumberWaitForVerify() {
                     record.setHostId(cursor.getString(cursor.getColumnIndex("hostid")));
                     record.setContent(cursor.getString(cursor.getColumnIndex("content")));
                     // 获取关联的活动名称和志愿者用户名
-                    record.setActivityName(cursor.getString(cursor.getColumnIndex("activity_name")));
+                    record.setActivityName(cursor.getString(cursor.getColumnIndex("name")));
                     record.setUsername(cursor.getString(cursor.getColumnIndex("volunteer_name")));
                     records.add(record);
                 } while (cursor.moveToNext());
@@ -1091,7 +1091,9 @@ public int getActivityNumberWaitForVerify() {
                     record.setUserId(cursor.getString(cursor.getColumnIndexOrThrow("user_id")));
                     record.setActivityId(cursor.getInt(cursor.getColumnIndexOrThrow("activity_id")));
                     record.setHostId(cursor.getString(cursor.getColumnIndexOrThrow("host_id")));
-
+                    // 获取关联的活动名称和志愿者用户名
+                    record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                    record.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("volunteer_name")));
                     // 若需关联用户名（从 account 表查询），需添加联查逻辑
                     // 示例联查：INNER JOIN account ON record.user_id = account.id
                     // 此处仅获取 record 表字段，如需 username 需修改 SQL 并调用 setUsername()
@@ -1436,7 +1438,9 @@ public int getActivityNumberWaitForVerify() {
                     if (hostIdIndex != -1) {
                         record.setHostId(cursor.getString(hostIdIndex));
                     }
-
+                    // 获取关联的活动名称和志愿者用户名
+                    record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                    record.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("volunteer_name")));
                     recordList.add(record);
                 } while (cursor.moveToNext());
             }
@@ -1660,30 +1664,35 @@ public int getActivityNumberWaitForVerify() {
         db.close(); // 关闭数据库连接
         return rowsAffected;
     }
-    public Record selectRecordByRecordId(Integer recordId) {
+    public ShowRecord selectRecordByRecordId(Integer recordId) {
         SQLiteDatabase db = getReadableDatabase();
-        Record record = new Record();
+        ShowRecord record = null; // 初始化为 null，无数据时返回 null
         Cursor cursor = null;
 
         try {
+            // 使用 SQL JOIN 查询关联表中的活动名称
             String[] columns = {
-                    "id",
-                    "picture",
-                    "volunteer_time",
-                    "date",
-                    "state",
-                    "user_id",
-                    "activity_id",
-                    "host_id"
+                    "record.id",
+                    "record.picture",
+                    "record.volunteer_time",
+                    "record.date",
+                    "record.state",
+                    "record.user_id",
+                    "record.activity_id",
+                    "record.host_id",
+                    "activity.name AS activity_name" // 关联活动表的名称字段
             };
 
-            String selection = "id = ?";
+            // 使用 LEFT JOIN 确保即使活动表中无匹配记录也能返回结果
+            String table = "record LEFT JOIN activity ON record.activity_id = activity.id";
+            String selection = "record.id = ?";
             String[] selectionArgs = {String.valueOf(recordId)};
 
-            cursor = db.query("record", columns, selection, selectionArgs, null, null, null);
+            cursor = db.query(table, columns, selection, selectionArgs, null, null, null);
+            System.out.println(cursor);
 
             if (cursor != null && cursor.moveToFirst()) {
-                // 从数据库中读取字段值，并设置到 Record 对象中
+                record = new ShowRecord(); // 仅在有数据时初始化对象
                 record.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 record.setPicture(cursor.getString(cursor.getColumnIndexOrThrow("picture")));
                 record.setVolunteerTime(cursor.getInt(cursor.getColumnIndexOrThrow("volunteer_time")));
@@ -1692,6 +1701,8 @@ public int getActivityNumberWaitForVerify() {
                 record.setUserId(cursor.getString(cursor.getColumnIndexOrThrow("user_id")));
                 record.setActivityId(cursor.getInt(cursor.getColumnIndexOrThrow("activity_id")));
                 record.setHostId(cursor.getString(cursor.getColumnIndexOrThrow("host_id")));
+                // 从关联表获取活动名称
+                record.setActivityName(cursor.getString(cursor.getColumnIndexOrThrow("activity_name")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1702,7 +1713,7 @@ public int getActivityNumberWaitForVerify() {
             db.close();
         }
 
-        return record;
+        return record; // 无数据时返回 null
     }
     public List<ShowRecord> getRecordsByUserId(String userId) {
         if (userId == null || userId.isEmpty()) {

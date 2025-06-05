@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.os.Environment;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,17 +23,19 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.Entity.Record;
+import com.example.myapplication.Entity.ShowRecord;
 
 import java.io.File;
 
 public class RecordDetailsFragment extends Fragment {
     private String currentUser;
+
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_record_details, container, false);
-        TextView activityNameTextView  = view.findViewById(R.id.activity_name_text);
+        TextView activityNameTextView = view.findViewById(R.id.activity_name_text);
         ImageView activityPictureImageView = view.findViewById(R.id.activity_picture);
         TextView userNameTextView = view.findViewById(R.id.user_name_text);
         TextView dateTextView = view.findViewById(R.id.record_time_text);
@@ -42,22 +46,76 @@ public class RecordDetailsFragment extends Fragment {
         LinearLayout buttonContainer = view.findViewById(R.id.button_container);
         DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
         Bundle args = getArguments();
+        System.out.println(args);
         int recordId;
         if (args != null) {
-            activityNameTextView.setText(args.getString("activity_name", "未知活动"));
-            Record recode = databaseHelper.selectRecordByRecordId(args.getInt("record_id"));
+            ShowRecord recode = null;
+            try {
+                recode = databaseHelper.selectRecordByRecordId(args.getInt("record_id"));
+                System.out.println(recode);
+                if (recode == null) {
+                    throw new IllegalArgumentException("记录不存在");
+                }
+            } catch (Exception e) {
+                Log.e("RecordLoader", "获取记录失败: " + e.getMessage());
+                // 跳过图片加载，继续执行后续代码
+//                return;
+            }
 
-            Glide.with(requireContext())
-                    .load(new File(recode.getPicture()))
-                    .into(activityPictureImageView);
+            String imagePathFromDb = recode.getPicture();
+
+            if (imagePathFromDb == null || imagePathFromDb.isEmpty()) {
+                Log.e("ImageLoader", "图片路径为空");
+                // 可以选择跳过图片加载或显示默认图片
+//                activityPictureImageView.setImageResource(R.drawable.ic_no_image);
+                // 继续执行后续代码，不返回
+            } else {
+                try {
+                    // 检查外部存储状态
+                    String state1 = Environment.getExternalStorageState();
+                    if (!Environment.MEDIA_MOUNTED.equals(state1)) {
+                        Log.e("ImageLoader", "外部存储不可用: " + state1);
+                        Toast.makeText(requireContext(), "存储不可用，请检查设置", Toast.LENGTH_SHORT).show();
+                        // 继续执行后续代码，不返回
+                    } else {
+                        // 构建完整文件路径
+                        File appImagesDir = new File(
+                                requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                                "AppImages"
+                        );
+                        File imageFile = new File(appImagesDir, imagePathFromDb);
+
+                        // 打印调试信息
+                        Log.d("ImageLoader", "数据库路径: " + imagePathFromDb);
+                        Log.d("ImageLoader", "完整路径: " + imageFile.getAbsolutePath());
+                        Log.d("ImageLoader", "文件是否存在: " + imageFile.exists());
+
+                        if (imageFile.exists()) {
+                            Glide.with(requireContext())
+                                    .load(imageFile)
+                                    .into(activityPictureImageView);
+                        } else {
+                            Log.e("ImageLoader", "文件不存在，可能已被删除或移动");
+//                            activityPictureImageView.setImageResource(R.drawable.ic_image_not_found);
+                            Toast.makeText(requireContext(), "图片已丢失，请重新上传", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("ImageLoader", "加载图片时发生异常: " + e.getMessage());
+                    // 显示默认图片
+//                    activityPictureImageView.setImageResource(R.drawable.ic_error);
+                    // 继续执行后续代码
+                }
+            }
 
             userNameTextView.setText(args.getString("username", "未知用户"));
+            activityNameTextView.setText(recode.getActivityName());
             dateTextView.setText(args.getString("date", "未知时间"));
             recordDurationTextView.setText(args.getString("volunteer_time", "未知时长"));
             recordId = args.getInt("record_id", 0);
             int state = args.getInt("state", 0);
-            String stateText="待审核";
-            int styleResId=R.style.StateTextPending;
+            String stateText = "待审核";
+            int styleResId = R.style.StateTextPending;
 
             switch (state) {
                 case 0:
@@ -84,14 +142,14 @@ public class RecordDetailsFragment extends Fragment {
         VolunteerViewModel viewModel = new ViewModelProvider(requireActivity()).get(VolunteerViewModel.class);
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
             currentUser = role;
-            Log.d("DEBUG","获取用户："+currentUser);
+            Log.d("DEBUG", "获取用户：" + currentUser);
 
 
-            if (role.equals("Admin")){
+            if (role.equals("Admin")) {
                 recordStateTextView.setVisibility(View.GONE);
                 buttonContainer.setVisibility(View.VISIBLE);
                 approveButton.setOnClickListener(v -> {
-                    databaseHelper.updateRecordState(recordId,2);
+                    databaseHelper.updateRecordState(recordId, 2);
                     NavController navController = Navigation.findNavController(v);
                     navController.popBackStack();
                 });
