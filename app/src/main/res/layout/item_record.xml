@@ -44,6 +44,13 @@
                 android:drawablePadding="8dp" />
 
             <!-- 时长 -->
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="245dp"
+                android:layout_height="236dp"
+                app:srcCompat="@mipmap/von_activity" />
+
             <TextView
                 android:id="@+id/record_duration_text"
                 android:layout_width="wrap_content"
@@ -67,16 +74,6 @@
         </LinearLayout>
 
         <!-- 右侧图片 -->
-        <ImageView
-            android:id="@+id/record_icon"
-            android:layout_width="144dp"
-            android:layout_height="144dp"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/logo"
-            android:contentDescription="活动图标"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

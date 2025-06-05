@@ -39,10 +39,10 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         holder.nameTextView.setText(activity.getName());
         holder.locationTextView.setText(activity.getArea());
         holder.timeTextView.setText(activity.getBeginTime());
-        holder.durationTextView.setText(String.valueOf(activity.getVolunteerTime()));
+        holder.durationTextView.setText(String.valueOf(activity.getVolunteerTime())+"小时");
         holder.endingTimeTextView.setText(activity.getEndTime());
         holder.activityUserTextView.setText(
-                activity.getActualCount()+" / " +activity.getCount()
+                activity.getActualCount()+" / " +activity.getCount()+"人"
         );
         holder.itemView.setOnClickListener(v -> listener.onActivityClick(activity));
     }
