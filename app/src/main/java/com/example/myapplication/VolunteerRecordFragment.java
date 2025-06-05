@@ -93,7 +93,6 @@ public class VolunteerRecordFragment extends Fragment {
             outputStream.flush();
             outputStream.close();
             inputStream.close();
-
             // 返回文件名，用于存入数据库
             return fileName;
 
@@ -153,7 +152,7 @@ public class VolunteerRecordFragment extends Fragment {
                 record.setUserId(UserName);
                 record.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
                 record.setActivityId(dbHelper.selectActivityByName(activityName).getId());
-                record.setPicture(url);
+                record.setPicture(imageUrl);
                 record.setHostId(dbHelper.selectActivityByName(activityName).getHostId());
                 try {
                     // 5. 存入数据库

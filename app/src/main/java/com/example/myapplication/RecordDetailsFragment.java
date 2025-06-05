@@ -15,14 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.myapplication.Entity.Activity;
+import com.bumptech.glide.Glide;
+import com.example.myapplication.Entity.Record;
 
-import java.util.Objects;
+import java.io.File;
 
 public class RecordDetailsFragment extends Fragment {
     private String currentUser;
@@ -40,10 +40,17 @@ public class RecordDetailsFragment extends Fragment {
         Button approveButton = view.findViewById(R.id.approve_button);
         Button rejectButton = view.findViewById(R.id.reject_button);
         LinearLayout buttonContainer = view.findViewById(R.id.button_container);
+        DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
         Bundle args = getArguments();
         int recordId;
         if (args != null) {
             activityNameTextView.setText(args.getString("activity_name", "未知活动"));
+            Record recode = databaseHelper.selectRecordByRecordId(args.getInt("record_id"));
+
+            Glide.with(requireContext())
+                    .load(new File(recode.getPicture()))
+                    .into(activityPictureImageView);
+
             userNameTextView.setText(args.getString("username", "未知用户"));
             dateTextView.setText(args.getString("date", "未知时间"));
             recordDurationTextView.setText(args.getString("volunteer_time", "未知时长"));
@@ -78,7 +85,7 @@ public class RecordDetailsFragment extends Fragment {
         viewModel.getUserRole().observe(getViewLifecycleOwner(), role -> {
             currentUser = role;
             Log.d("DEBUG","获取用户："+currentUser);
-            DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
+
 
             if (role.equals("Admin")){
                 recordStateTextView.setVisibility(View.GONE);
@@ -99,8 +106,9 @@ public class RecordDetailsFragment extends Fragment {
 //                System.out.println(st);
 //                if(st==0) .setVisibility(View.GONE);
 //            }
-            databaseHelper.close();
+
         });
+        databaseHelper.close();
         return view;
     }
 }

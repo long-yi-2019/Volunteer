@@ -48,5 +48,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.room:room-runtime:2.6.1"
     implementation 'org.projectlombok:lombok:1.18.26'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
 }
