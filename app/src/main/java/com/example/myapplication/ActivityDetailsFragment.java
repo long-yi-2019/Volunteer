@@ -62,7 +62,7 @@ public class ActivityDetailsFragment extends Fragment {
             descriptionTextView.setText(activityName.getContent());
             locationTextView.setText(activityName.getArea());
             timeTextView.setText(activityName.getBeginTime());
-            durationTextView.setText(activityName.getEndTime());
+            durationTextView.setText(activityName.getEndTime()+"小时");
             userText.setText(activityName.getActualCount()+" / "+ activityName.getCount());
             dbHelper.close();
             if (!Objects.equals(args.getString("activity_state"), "0")){
